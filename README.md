@@ -8,6 +8,7 @@ Shitty piece of code that should be **brus ripoff
 - [ ] Add superadmin role with rights to add and remove students, teachers and subjects
 - [ ] Fix bugs (it's not really bugs but rather unfinished work)
 - [ ] Completly rewrite "Plan lekcji"
+- [ ] Add flag system to Schedule to make possible add things like "Lekcja odwołana", "Zastępstwo"
 - [ ] Whatever else that comes to my mind and be worth spent time
 
 # Known bugs
