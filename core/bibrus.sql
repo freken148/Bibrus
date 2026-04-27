@@ -109,27 +109,3 @@ CREATE TABLE planLekcji (
     FOREIGN KEY (id_przedmiotu) REFERENCES przedmioty(id_przedmiotu),
     FOREIGN KEY (numer_lekcji) REFERENCES LekcjeDictionary(numer_lekcji)
 );
-
-
-
-
-
-SELECT lekcjedictionary.numer_lekcji, godzina_lekcji, imie, nazwisko, nazwa, numer_sali, dzien
-FROM lekcjedictionary
-LEFT JOIN planlekcji ON lekcjedictionary.numer_lekcji = planlekcji.numer_lekcji AND id_klasy = 1
-LEFT JOIN nauczyciele ON planlekcji.id_nauczyciela = nauczyciele.id_nauczyciela
-LEFT JOIN przedmioty ON planlekcji.id_przedmiotu = przedmioty.id_przedmiotu
-ORDER BY lekcjedictionary.numer_lekcji, dzien
-
-SELECT lekcjedictionary.numer_lekcji, godzina_lekcji, imie, nazwisko, nazwa, numer_sali, dzien
-FROM lekcjedictionary
-LEFT JOIN planlekcji 
-ON lekcjedictionary.numer_lekcji = planlekcji.numer_lekcji AND id_klasy = 1
-LEFT JOIN nauczyciele 
-ON planlekcji.id_nauczyciela = nauczyciele.id_nauczyciela
-LEFT JOIN przedmioty 
-ON planlekcji.id_przedmiotu = przedmioty.id_przedmiotu
-WHERE dzien = "Piątek" AND planlekcji.numer_lekcji = 2
-ORDER BY lekcjedictionary.numer_lekcji, dzien
-
-SELECT godzina_lekcji FROM lekcjedictionary WHERE numer_lekcji = 1
