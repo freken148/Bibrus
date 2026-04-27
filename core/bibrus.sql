@@ -133,5 +133,3 @@ WHERE dzien = "Piątek" AND planlekcji.numer_lekcji = 2
 ORDER BY lekcjedictionary.numer_lekcji, dzien
 
 SELECT godzina_lekcji FROM lekcjedictionary WHERE numer_lekcji = 1
-
-SHOW CREATE TABLE planlekcji;
