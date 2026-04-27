@@ -11,8 +11,13 @@ Shitty piece of code that should be **brus ripoff
 - [ ] Add regexp to login fields
 - [ ] Add student journal number
 - [ ] Fix bugs (it's not really bugs but rather unfinished work)
+<<<<<<< HEAD
 - [ ] Completly rewrite `plan_lekcji_functions.php`
 - [ ] Add superadmin role with rights to change everything
+=======
+- [ ] Completly rewrite "Plan lekcji"
+- [ ] Add flag system to Schedule to make possible add things like "Lekcja odwołana", "Zastępstwo"
+>>>>>>> 2537edaa633ba92d612914af642a74d0173bac83
 - [ ] Whatever else that comes to my mind and be worth spent time
 
 # Known bugs
