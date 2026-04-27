@@ -35,10 +35,7 @@
                     echo '<br>Sala: ' . $row['numer_sali'];
                     echo "</td>";
                 }
-                // At this point i think it would be better if i just made table "dayofweeks" or smth and just used it instead of enum but fuck this i don't wanna 100500 times recreating tables and other shit, then generate etc. etc.
-                // But it seems as so simple solution
-                // But no
-                // i finally did it, but in my opinion a whole of this code a piece of shit and if i will have any free time and purpose i rewrite it's all fucking bullshit
+                // I need remake it
             }
             echo "</tr>";
 
