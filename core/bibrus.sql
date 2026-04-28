@@ -5,9 +5,10 @@ CREATE TABLE Przedmioty (
 
 CREATE TABLE Nauczyciele (
     id_nauczyciela INT PRIMARY KEY AUTO_INCREMENT,
+    id_przedmiotu INT,
     imie VARCHAR(50),
     nazwisko VARCHAR(50),
-    id_przedmiotu INT,
+    Haslo VARCHAR(100),
     FOREIGN KEY (id_przedmiotu) REFERENCES Przedmioty(id_przedmiotu)
 );
 
@@ -44,8 +45,9 @@ CREATE TABLE Oceny (
     id_ucznia INT,
     id_przedmiotu INT,
     id_nauczyciela INT,
-    data DATE,
+    data DATETIME(0),
     ocena FLOAT,
+    waga INT CHECK (waga >= 1 && waga <= 5),
     komentarz VARCHAR(1000),
     FOREIGN KEY (id_ucznia) REFERENCES Uczniowie(id_ucznia),
     FOREIGN KEY (id_przedmiotu) REFERENCES Przedmioty(id_przedmiotu),
@@ -57,22 +59,13 @@ CREATE TABLE Frekwencja (
     id_obecnosci INT PRIMARY KEY AUTO_INCREMENT,
     id_ucznia INT,
     id_przedmiotu INT,
-    data DATE,
+    data DATETIME(0),
     typ ENUM('Obecny', 'Usprawiedliwiony', 'Nieobecny', 'Zwolniony', 'Spóźniony') DEFAULT 'Obecny',
     FOREIGN KEY (id_ucznia) REFERENCES Uczniowie(id_ucznia),
     FOREIGN KEY (id_przedmiotu) REFERENCES Przedmioty(id_przedmiotu)
 );
 
-ALTER TABLE nauczyciele ADD Haslo VARCHAR(500);
 UPDATE nauczyciele SET Haslo = 'Sala332!';
-
-ALTER TABLE oceny ADD waga INT;
-ALTER TABLE oceny ADD CHECK (waga >= 1 && waga <= 5);
-
-CREATE VIEW ocenyCorrect AS SELECT id_oceny, id_ucznia, id_przedmiotu, id_nauczyciela, data, ocena, waga, komentarz FROM oceny;
-
-ALTER TABLE oceny MODIFY data DATETIME(0);
-ALTER TABLE Frekwencja MODIFY data DATETIME(0);
 
 CREATE TABLE LekcjeDictionary (
     numer_lekcji INT PRIMARY KEY AUTO_INCREMENT,
@@ -96,6 +89,14 @@ VALUES
 ('17:35:00'),
 ('18:25:00');
 
+CREATE TABLE dnitygodnia (
+    numer_dnia INT PRIMARY KEY AUTO_INCREMENT,
+    dzien ENUM('Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota', 'Niedziela')
+);
+
+INSERT INTO dnitygodnia (dzien) 
+VALUES ('Poniedziałek'), ('Wtorek'), ('Środa'), ('Czwartek'), ('Piątek'), ('Sobota'), ('Niedziela');
+
 CREATE TABLE planLekcji (
     id_lekcji INT PRIMARY KEY AUTO_INCREMENT,
     id_klasy INT,
@@ -103,9 +104,30 @@ CREATE TABLE planLekcji (
     id_przedmiotu INT,
     numer_lekcji INT,
     numer_sali INT,
-    dzien ENUM('Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek'),
+    numer_dnia INT,
     FOREIGN KEY (id_klasy) REFERENCES klasy(id_klasy),
     FOREIGN KEY (id_nauczyciela) REFERENCES nauczyciele(id_nauczyciela),
     FOREIGN KEY (id_przedmiotu) REFERENCES przedmioty(id_przedmiotu),
-    FOREIGN KEY (numer_lekcji) REFERENCES LekcjeDictionary(numer_lekcji)
+    FOREIGN KEY (numer_lekcji) REFERENCES LekcjeDictionary(numer_lekcji),
+    FOREIGN KEY (numer_dnia) REFERENCES dnitygodnia(numer_dnia)
 );
+
+CREATE TABLE terminarz (
+    id_wydarzenia INT PRIMARY KEY AUTO_INCREMENT,
+    id_klasy INT,
+    id_nauczyciela INT,
+    numer_dnia INT,
+    typ_wydarzenia ENUM('sprawdzian', 'kartkówka', 'nieobecność', 'zastępstwo', 'informacja', 'inne', 'wywiadówka'),
+    zakres_start DATETIME(0),
+    zakres_end DATETIME(0),
+    data_dodania DATETIME(0),
+    FOREIGN KEY (id_klasy) REFERENCES klasy(id_klasy),
+    FOREIGN KEY (id_nauczyciela) REFERENCES nauczyciele(id_nauczyciela),
+    FOREIGN KEY (numer_dnia) REFERENCES dnitygodnia(numer_dnia)
+);
+
+SELECT nazwa, imie, nazwisko, numer_sali 
+                        FROM planlekcji
+                        INNER JOIN przedmioty ON planlekcji.id_przedmiotu = przedmioty.id_przedmiotu
+                        INNER JOIN nauczyciele ON planlekcji.id_nauczyciela = nauczyciele.id_nauczyciela
+                        WHERE numer_lekcji = 2 AND numer_dnia = 1 AND id_klasy = 1

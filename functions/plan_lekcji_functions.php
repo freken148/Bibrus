@@ -1,28 +1,27 @@
 <?php
     function ShowPlan() {
-        global $conn, $fetchKlasa; 
-
-        $days = array('Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota', 'Niedziela');
-        $timeStart = array('07:10','08:00','08:50','09:40','10:40','11:30','12:20','13:20','14:15','15:05','15:55','16:45','17:35','18:25');
-        $timeEnd = array('07:55','08:45','09:35','10:25','11:25','12:15','13:05','14:10','15:00','15:50','15:55','16:40','18:20','19:10');
+        global $conn, $fetchKlasa;
     
         echo "<table border='1'>";
         echo "<tr> <th>Nr. lekcji</th> <th>Godziny</th> <th>Poniedziałek</th> <th>Wtorek</th> <th>Środa</th> <th>Czwartek</th> <th>Piątek</th> <th>Sobota</th> <th>Niedziela</th> </tr>";
-        for ($i = 0; $i < 14; $i++) {
+        for ($i = 1; $i < 15; $i++) {
+            $sql = "SELECT numer_lekcji, godzina_lekcji AS godzina_start, DATE_ADD(godzina_lekcji, INTERVAL 45 MINUTE) AS godzina_end
+                    FROM lekcjedictionary
+                    WHERE numer_lekcji = $i";
+            $result = $conn->query($sql . ';');
+            $row = $result->fetch_assoc();
+
+            $timeStart = substr($row['godzina_start'], 0, -3);
+            $timeEnd = substr($row['godzina_end'], 0, -3);
             echo "<tr>";
-            echo "<td>" . $i . "</td>";
-            echo "<td>" . $timeStart[$i] . " - " . $timeEnd[$i] . "</td>";
+            echo "<td>" . $i-1 . "</td>";
+            echo "<td>" . $timeStart . " - " . $timeEnd . "</td>";
             for ($j = 0; $j < 7; $j++) {
-                $sql = "SELECT lekcjedictionary.numer_lekcji, godzina_lekcji, imie, nazwisko, nazwa, numer_sali, dzien
-                        FROM lekcjedictionary
-                        LEFT JOIN planlekcji 
-                        ON lekcjedictionary.numer_lekcji = planlekcji.numer_lekcji AND id_klasy = $fetchKlasa
-                        LEFT JOIN nauczyciele 
-                        ON planlekcji.id_nauczyciela = nauczyciele.id_nauczyciela
-                        LEFT JOIN przedmioty 
-                        ON planlekcji.id_przedmiotu = przedmioty.id_przedmiotu
-                        WHERE dzien = '$days[$j]' AND planlekcji.numer_lekcji = $i+1
-                        ORDER BY lekcjedictionary.numer_lekcji, dzien";
+                $sql = "SELECT nazwa, imie, nazwisko, numer_sali 
+                        FROM planlekcji
+                        INNER JOIN przedmioty ON planlekcji.id_przedmiotu = przedmioty.id_przedmiotu
+                        INNER JOIN nauczyciele ON planlekcji.id_nauczyciela = nauczyciele.id_nauczyciela
+                        WHERE numer_lekcji = $i AND numer_dnia = $j+1 AND id_klasy = $fetchKlasa";
                 $result = $conn->query($sql . ';');
                 $row = $result->fetch_assoc();
 
@@ -35,15 +34,20 @@
                     echo '<br>Sala: ' . $row['numer_sali'];
                     echo "</td>";
                 }
-                // I need remake it
             }
             echo "</tr>";
 
             // breaks
-            if ($i < 13) {
+            if ($i < 14) {
+                $sql = "SELECT godzina_lekcji AS godzina_start
+                        FROM lekcjedictionary
+                        WHERE numer_lekcji = $i+1";
+                $result = $conn->query($sql . ';');
+                $row = $result->fetch_assoc();
+                $timeStart = substr($row['godzina_start'], 0, -3);
                 echo "<tr>";
                 echo "<td></td>";
-                echo "<td>" . $timeEnd[$i] . " - " . $timeStart[$i+1] ."</td>";
+                echo "<td>" . $timeEnd . " - " . $timeStart ."</td>";
                 for ($p = 0; $p < 7; $p++) {
                     echo "<td></td>";
                 }

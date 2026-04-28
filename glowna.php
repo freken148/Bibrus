@@ -13,8 +13,8 @@
     ?>
     <button onclick="document.location='frekwencja.php'">Frekwencja</button>
     <button onclick="document.location='oceny.php'">Oceny</button>
-    <button onclick="document.location='terminarz.php'" disabled>Terminarz</button>
     <button onclick="document.location='plan_lekcji.php'">Plan lekcji</button>
+    <button onclick="document.location='terminarz.php'">Terminarz</button>
     <form method="POST" action="logowanie.php">
         <button>Wyloguj</button>
     </form>
