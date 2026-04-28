@@ -11,13 +11,13 @@ Shitty piece of code that should be **brus ripoff
 - [ ] Add regexp to login fields
 - [ ] Add student journal number
 - [ ] Fix bugs (it's not really bugs but rather unfinished work)
-- [ ] Completly rewrite `plan_lekcji_functions.php`
+- [x] Completly rewrite `plan_lekcji_functions.php`
 - [ ] Add superadmin role with rights to change everything
 - [ ] Whatever else that comes to my mind and be worth spent time
 
 # Known bugs
 - Error when using `\` char in input fields into `logowanie.php`
-- "Zwolniony" shouldn't impact on attendance at all but it does as positive
+- `Zwolniony` shouldn't impact on attendance at all but it does as positive
 
 # Advice
 It's better to use `127.0.0.1` instead of `localhost` for avoid problems when Windows firstly read `localhost` as IPv6 `::1` address what causes a very big slowdown a work of xampp and all that related to it. 

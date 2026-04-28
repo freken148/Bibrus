@@ -125,9 +125,3 @@ CREATE TABLE terminarz (
     FOREIGN KEY (id_nauczyciela) REFERENCES nauczyciele(id_nauczyciela),
     FOREIGN KEY (numer_dnia) REFERENCES dnitygodnia(numer_dnia)
 );
-
-SELECT nazwa, imie, nazwisko, numer_sali 
-                        FROM planlekcji
-                        INNER JOIN przedmioty ON planlekcji.id_przedmiotu = przedmioty.id_przedmiotu
-                        INNER JOIN nauczyciele ON planlekcji.id_nauczyciela = nauczyciele.id_nauczyciela
-                        WHERE numer_lekcji = 2 AND numer_dnia = 1 AND id_klasy = 1
