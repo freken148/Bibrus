@@ -44,13 +44,23 @@
                 GROUP BY uczniowie.id_ucznia";
 
         echo "<table border='1'>";
-        echo "<tr><th>Uczen</th><th>Frekwencja</th><th>O</th><th>Sp</th><th>Zw</th><th>Us</th><th>N</th></tr>";
+        echo "<tr>";
+        if ($_POST['KlasaUczen'] == 'klasa') { 
+            echo "<th>Nr.</th>";
+        }
+        echo "<th>Uczen</th><th>Frekwencja</th><th>O</th><th>Sp</th><th>Zw</th><th>Us</th><th>N</th></tr>";
         $result = $conn->query($sql . ';');
+
+        $numerWDzienniku = 0;
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
+                $numerWDzienniku++;
                 $uczenID = $row['id_ucznia'];
 
                 echo "<tr>";
+                    if ($_POST['KlasaUczen'] == 'klasa') { 
+                        echo "<td>" . $numerWDzienniku . "</td>";
+                    }  
                     echo "<td>" . $row["imie"];
                     echo " " . $row["nazwisko"] . "</td>";
                     echo "<td>" .  number_format($row["frekwencja"], 2, '.') . "</td>";
@@ -68,6 +78,9 @@
             $result = $conn->query($sql . ';');
             while($row = $result->fetch_assoc()) {
                 echo "<tr>";
+                    if ($_POST['KlasaUczen'] == 'klasa') { 
+                        echo "<td>" . $numerWDzienniku . "</td>";
+                    }  
                     echo "<td>" . $row["imie"] . "</td>";
                     echo "<td>" . $row["nazwisko"] . "</td>";
                     echo "<td>" . $row["nazwa"] . "</td>";

@@ -41,11 +41,18 @@
                 ORDER BY nazwa";
 
         echo "<table border='1'>";
-        echo "<tr><th>Uczeń</th><th>Oceny</th><th>Srednia ucznia</th></tr>";
+        echo "<tr>";
+        if ($_POST['KlasaUczen'] == 'klasa') { 
+            echo "<th>Nr.</th>";
+        }  
+        echo "<th>Uczeń</th><th>Oceny</th><th>Srednia ucznia</th></tr>";
 
         $result = $conn->query($sql . ';');
+
+        $numerWDzienniku = 0;
         if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {                    
+            while($row = $result->fetch_assoc()) {    
+                $numerWDzienniku++;                
                 $FullOceny = '';
                 $uczenID = $row['id_ucznia'];
 
@@ -55,6 +62,9 @@
                         WHERE id_ucznia = $uczenID";
 
                 echo "<tr>";
+                    if ($_POST['KlasaUczen'] == 'klasa') { 
+                        echo "<td>" . $numerWDzienniku . "</td>";
+                    }  
                     echo "<td>" . $row["imie"];
                     echo ' ' . $row["nazwisko"] . "</td>";
 
@@ -85,8 +95,11 @@
             $result = $conn->query($sql . ';');
             while($row = $result->fetch_assoc()) {
                 echo "<tr>";
+                    if ($_POST['KlasaUczen'] == 'klasa') { 
+                        echo "<td>" . $numerWDzienniku . "</td>";
+                    }  
                     echo "<td>" . $row["imie"] . "</td>";
-                    echo "<td>" . $row["nazwisko"] . "</td>";
+                    echo " " . $row["nazwisko"] . "</td>";
                     echo "<td>" . $row["nazwa"] . "</td>";
                     echo "<td>Brak ocen</td>";
                     echo "<td>Brak średniej</td>";

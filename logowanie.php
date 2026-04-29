@@ -14,9 +14,9 @@
 </head>
 <body>
     <form method="POST" action="logowanie.php">
-        <input name="imie" placeholder="imie">
-        <input name="nazwisko" placeholder="nazwisko">
-        <input name="haslo" type="password" placeholder="haslo">
+        <input name="imie" placeholder="imie" pattern="^[^\\]*$">
+        <input name="nazwisko" placeholder="nazwisko" pattern="^[^\\]*$">
+        <input name="haslo" type="password" placeholder="haslo" pattern="^[^\\]*$">
         <button>Zaloguj</button>
     </form>
 </body>
@@ -40,6 +40,7 @@ if (isset($_POST['imie']) && isset($_POST['nazwisko']) && isset($_POST['haslo'])
 
             $_SESSION['klasaDefault'] = 1;
             $_SESSION['uczenDefault'] = 1;
+            $_SESSION['miesiacDefault'] = 1;
         }
         header('Location: glowna.php');
     } else {

@@ -17,6 +17,16 @@
                 SelectKlasy();
             ?>
         </select>
+        <select name="wybrany_miesiac" onchange='this.form.submit()'>
+            <?php
+                miesiacSelect();
+            ?>
+        </select>
+        <select name="wybrany_rok" onchange='this.form.submit()'>
+            <?php
+                rokSelect();
+            ?>
+        </select>
         <button name="glowna">Do głównej</button> 
         <?php
             Init();

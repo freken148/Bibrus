@@ -8,11 +8,12 @@ Shitty piece of code that should be **brus ripoff
 
 # To do
 - [ ] Complete `terminarz.php`
-- [ ] Add regexp to login fields
-- [ ] Add student journal number
+- [x] Add regexp to login fields
+- [x] Add student journal number
 - [ ] Fix bugs (it's not really bugs but rather unfinished work)
 - [x] Completly rewrite `plan_lekcji_functions.php`
 - [ ] Add superadmin role with rights to change everything
+- [ ] Changing grades after rating
 - [ ] Whatever else that comes to my mind and be worth spent time
 
 # Known bugs
