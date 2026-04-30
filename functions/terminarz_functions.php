@@ -10,6 +10,7 @@
     
     function ShowTerminarz() {
         global $conn, $fetchKlasa; 
+        
         $year = $_POST['wybrany_rok'] ?? 1;
         $month = $_POST['wybrany_miesiac'] ?? 1;
         $klasa = $_POST['wybrana_klasa'] ?? 1;
