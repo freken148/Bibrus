@@ -17,7 +17,7 @@ Shitty piece of code that should be **brus ripoff
 - [ ] Whatever else that comes to my mind and be worth spent time
 
 # Known bugs
-- Error when using `\` char in input fields into `logowanie.php`
+- ~~Error when using `\` char in input fields into `logowanie.php`~~
 - `Zwolniony` shouldn't impact on attendance at all but it does as positive
 
 # Advice
