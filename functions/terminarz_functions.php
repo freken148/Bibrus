@@ -10,8 +10,9 @@
     
     function ShowTerminarz() {
         global $conn, $fetchKlasa; 
-        $year = $_POST['wybrany_rok'];
-        $month = $_POST['wybrany_miesiac'];
+        $year = $_POST['wybrany_rok'] ?? 1;
+        $month = $_POST['wybrany_miesiac'] ?? 1;
+        $klasa = $_POST['wybrana_klasa'] ?? 1;
 
         $date = new DateTime($year . '-' . $month . '-01'); // ley say month 02
         $daysInMonth = intval($date->format('t')); // 28
@@ -25,7 +26,9 @@
             echo "<tr>";
             for ($j = 1; $j < 8; $j++) { 
                 if ($firstDayMonth <= $d && $d-$firstDayMonth < $daysInMonth) {
-                    echo "<td>" . $d-$firstDayMonth+1 . "</td>"; 
+                    echo "<td>";
+                    echo $d-$firstDayMonth+1;           
+                    echo "</td>"; 
                 } else {
                     echo "<td></td>";
                 }
