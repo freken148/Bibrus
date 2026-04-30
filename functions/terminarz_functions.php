@@ -14,9 +14,11 @@
         $month = $_POST['wybrany_miesiac'] ?? 1;
         $klasa = $_POST['wybrana_klasa'] ?? 1;
 
-        $date = new DateTime($year . '-' . $month . '-01'); // ley say month 02
-        $daysInMonth = intval($date->format('t')); // 28
-        $firstDayMonth = intval($date->format('N')); // Sunday - 7
+        $date = new DateTime($year . '-' . $month . '-01'); 
+        $dateString = $date->format('Y-m-d');
+        $daysInMonth = intval($date->format('t'));
+        $firstDayMonth = intval($date->format('N')); 
+        $date->modify('-1 days');
         $d = 1;
 
         echo "<table border='1'>";
@@ -25,9 +27,31 @@
         while ($d-$firstDayMonth < $daysInMonth) { 
             echo "<tr>";
             for ($j = 1; $j < 8; $j++) { 
+                $date->modify('+1 days');
+                $dateString = $date->format('Y-m-d');
+                $sql = "SELECT 
+                            imie,
+                            nazwisko, 
+                            nazwa,
+                            typ_wydarzenia
+                        FROM terminarz
+                        INNER JOIN nauczyciele 
+                        ON terminarz.id_nauczyciela = nauczyciele.id_nauczyciela
+                        INNER JOIN przedmioty 
+                        ON terminarz.id_przedmiotu = przedmioty.id_przedmiotu
+                        WHERE id_klasy = $klasa
+                        AND DATEDIFF('$dateString', zakres_start) >= 0
+                        AND DATEDIFF(zakres_end, '$dateString') >= 0";
+                $result = $conn->query($sql . ';');
+
                 if ($firstDayMonth <= $d && $d-$firstDayMonth < $daysInMonth) {
                     echo "<td>";
-                    echo $d-$firstDayMonth+1;           
+                    echo $d-$firstDayMonth+1;
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<div style='border: 1px solid black;'>";
+                        echo $row['typ_wydarzenia'] . "<br>" . $row['nazwa'] . "<br>" . $row['imie'] . " " . $row['nazwisko']; 
+                        echo "</div>";
+                    }           
                     echo "</td>"; 
                 } else {
                     echo "<td></td>";
@@ -58,12 +82,19 @@
                 FROM terminarz";
         $result = $conn->query($sql . ';');
         $row = $result->fetch_assoc();
+
         $start = $row['year_start'];
         $end = $row['year_end'];
-        echo "<option value='" . $start . "'>" . $start . "</option>";
+        
+        $_SESSION['rokDefault'] = $_POST['wybrany_rok'] ?? $start;
+        $selected_object = $_SESSION['rokDefault'];
+
+        $selected = ($selected_object == $start) ? "selected" : "";
+        echo "<option value='" . $start . "' $selected>" . $start . "</option>";
         while($start != $end) {
             $start++;
-            echo "<option value='" . $start . "'>" . $start . "</option>";
+            $selected = ($selected_object == $start) ? "selected" : "";
+            echo "<option value='" . $start . "'  $selected>" . $start . "</option>";
         }
     }
 ?>

@@ -41,6 +41,7 @@ if (isset($_POST['imie']) && isset($_POST['nazwisko']) && isset($_POST['haslo'])
             $_SESSION['klasaDefault'] = 1;
             $_SESSION['uczenDefault'] = 1;
             $_SESSION['miesiacDefault'] = 1;
+            $_SESSION['rokDefault'] = 1;
         }
         header('Location: glowna.php');
     } else {

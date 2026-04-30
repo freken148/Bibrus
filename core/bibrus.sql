@@ -116,12 +116,13 @@ CREATE TABLE terminarz (
     id_wydarzenia INT PRIMARY KEY AUTO_INCREMENT,
     id_klasy INT,
     id_nauczyciela INT,
-    numer_dnia INT,
-    typ_wydarzenia ENUM('sprawdzian', 'kartkówka', 'nieobecność', 'zastępstwo', 'informacja', 'inne', 'wywiadówka'),
+    id_przedmiotu INT,
+    typ_wydarzenia ENUM('Sprawdzian', 'Kartkówka', 'Nieobecność', 'Zastępstwo', 'Informacja', 'Inne', 'Wywiadówka'),
+    opis VARCHAR(1000),
     zakres_start DATETIME(0),
     zakres_end DATETIME(0),
     data_dodania DATETIME(0),
     FOREIGN KEY (id_klasy) REFERENCES klasy(id_klasy),
     FOREIGN KEY (id_nauczyciela) REFERENCES nauczyciele(id_nauczyciela),
-    FOREIGN KEY (numer_dnia) REFERENCES dnitygodnia(numer_dnia)
+    FOREIGN KEY (id_przedmiotu) REFERENCES przedmioty(id_przedmiotu)
 );

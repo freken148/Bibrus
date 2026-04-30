@@ -9,7 +9,7 @@ Shitty piece of code that should be **brus ripoff
 # To do
 - [ ] Complete `terminarz.php`
 - - [x] Calendar
-- - [ ] Fetching data from db and show to end user
+- - [x] Fetching data from db and show to end user
 - - [ ] Possibilty to add events for teachers 
 - [x] Add regexp to login fields
 - [x] Add student journal number
