@@ -34,7 +34,11 @@
                             imie,
                             nazwisko, 
                             nazwa,
-                            typ_wydarzenia
+                            typ_wydarzenia,
+                            DATEDIFF('$dateString', zakres_start) AS check_start,
+                            DATEDIFF(zakres_end, '$dateString') AS check_end,
+                            DATE_FORMAT(zakres_start, '%H:%i') AS time_start,
+                            DATE_FORMAT(zakres_end, '%H:%i') AS time_end
                         FROM terminarz
                         INNER JOIN nauczyciele 
                         ON terminarz.id_nauczyciela = nauczyciele.id_nauczyciela
@@ -51,6 +55,9 @@
                     while ($row = $result->fetch_assoc()) {
                         echo "<div style='border: 1px solid black;'>";
                         echo $row['typ_wydarzenia'] . "<br>" . $row['nazwa'] . "<br>" . $row['imie'] . " " . $row['nazwisko']; 
+                        if ($row['check_start'] == $row['check_end']) {
+                            echo "<br>Godziny: " . $row['time_start'] . " do " . $row['time_end'];  
+                        }
                         echo "</div>";
                     }           
                     echo "</td>"; 
