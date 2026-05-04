@@ -31,6 +31,7 @@
                 $date->modify('+1 days');
                 $dateString = $date->format('Y-m-d');
                 $sql = "SELECT 
+                            id_wydarzenia,
                             imie,
                             nazwisko, 
                             nazwa,
@@ -52,14 +53,25 @@
                 if ($firstDayMonth <= $d && $d-$firstDayMonth < $daysInMonth) {
                     echo "<td>";
                     echo $d-$firstDayMonth+1;
+                    
                     while ($row = $result->fetch_assoc()) {
-                        echo "<div style='border: 1px solid black;'>";
+                        // I should export all of this to separate files later and leave in div only specific class
+                        $Wid = $row['id_wydarzenia'];
+
+                        echo "<br><div style='border: 1px solid black; cursor: pointer;' onclick='this.querySelector(\"input\").checked = true; f = this.closest(\"form\"); f.action=\"terminarzInfoAdd.php\"; f.submit(); f.action=\"terminarz.php\"'>";
+                        echo "<input type='radio' name='terminarzINFO' value='$Wid' hidden>";
+                        // im fucking genius nahui 23:43 04.05.2026
                         echo $row['typ_wydarzenia'] . "<br>" . $row['nazwa'] . "<br>" . $row['imie'] . " " . $row['nazwisko']; 
+
                         if ($row['check_start'] == $row['check_end']) {
                             echo "<br>Godziny: " . $row['time_start'] . " do " . $row['time_end'];  
                         }
+                        
+                        echo "<br><br><button name='terminarzRemove'>X</button>";
                         echo "</div>";
-                    }           
+                    }  
+
+                    echo "<br><button name='terminarzADD' formaction='terminarzInfoAdd.php'>+</button>";         
                     echo "</td>"; 
                 } else {
                     echo "<td></td>";
@@ -73,6 +85,7 @@
 
     function miesiacSelect() {
         $months = array('Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sieprień', 'Wrzesień', 'Paźdźiernik', 'Listopad', 'Grudzień');
+
         $_SESSION['miesiacDefault'] = $_POST['wybrany_miesiac'] ?? 1;
         $selected_object = $_SESSION['miesiacDefault'];
         
@@ -93,7 +106,7 @@
 
         $start = $row['year_start'];
         $end = $row['year_end'];
-        
+
         $_SESSION['rokDefault'] = $_POST['wybrany_rok'] ?? $start;
         $selected_object = $_SESSION['rokDefault'];
 

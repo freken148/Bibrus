@@ -11,7 +11,7 @@ Shitty piece of code that should be **brus ripoff
 - [ ] Complete `terminarz.php`
 - - [x] Calendar
 - - [x] Fetching data from db and show to end user
-- - [ ] Extended view, when user click on the event, with `data_dodania`, `opis`
+- - [x] Details view, when user click on the event
 - - [ ] Possibilty to add/remove events for teachers 
 - [ ] Changes in `plan_lekcji.php` when `Zastępstwo` or `Odwołanie` and teacher absent without replacement
 - [x] Add regexp to login fields
@@ -31,7 +31,7 @@ Shitty piece of code that should be **brus ripoff
 - `Zwolniony` shouldn't impact on attendance at all but it does as positive
 
 # Advice
-It's better to use `127.0.0.1` instead of `localhost` for avoid problems when Windows firstly read `localhost` as IPv6 `::1` address what causes a very big slowdown a work of xampp and all that related to it. 
+It's better to use `127.0.0.1` instead of `localhost` for avoid problems when Windows firstly read `localhost` as IPv6 `::1` address what causes a very big slowdown of xampp and all that related to it. 
 Also run xampp as administrator whenever possible to avoid errors on close.
 
 # generate.php
