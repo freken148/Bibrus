@@ -2,6 +2,14 @@
     require "core/idk.php";
     require "functions/terminarz_functions.php";
     require "core/SelectUczenKlasa.php";
+    
+    if (isset($_POST['TerAdd'])) {
+        terminarzDodaj();
+    }
+
+    if (isset($_POST['terminarzREMOVE'])) {
+        terminarzRemove();
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -8,13 +8,14 @@ Shitty piece of code that should be **brus ripoff
 - Interactive timetable
 
 # To do
-- [ ] Complete `terminarz.php`
+- [x] Complete `terminarz.php`
 - - [x] Calendar
 - - [x] Fetching data from db and show to end user
 - - [x] Details view, when user click on the event
-- - [ ] Possibilty to add
-- - [ ] Possibility to remove
-- [ ] Changes in `plan_lekcji.php` when `Zastępstwo` or `Odwołanie` and teacher absent without replacement
+- - [x] Add
+- - [x] Remove
+- - [ ] (O) Pick start datetime based on where '+' been clicked
+- - [ ] (O) Relation between `plan_lekcji.php` and `terminarz.php`
 - [x] Add regexp to login fields
 - [x] Add student journal number
 - [ ] Fix bugs (it's not really bugs but rather unfinished work)
@@ -22,10 +23,14 @@ Shitty piece of code that should be **brus ripoff
 - [ ] Add superadmin role with rights to change everything
 - [ ] Changing grades after rating
 - [ ] Login for students
-- [ ] Adding classes to tags for future work on appearence 
-- [ ] (maybe) Rewrite everything to more OOP way (now it's rather mix of procedural and OOP solutions, mainly procedural)
-- [ ] (maybe) Export all queries to separate file where it's been procedures which called by EXEC instead of whole query
+- [ ] Add classes for future work on appearence 
+- [ ] (M) Rewrite everything to more OOP way (now it's rather mix of procedural and OOP solutions, mainly procedural)
+- [ ] (M) Export all queries to separate file where it's been procedures which called by EXEC instead of whole query
+- [ ] (M) General refactoring
 - [ ] Whatever else that comes to my mind and be worth spent time
+
+O - optional
+M - maybe
 
 # Known bugs
 - ~~Error when using `\` char in input fields into `logowanie.php`~~

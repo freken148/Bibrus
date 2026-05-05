@@ -52,7 +52,55 @@
                 echo "<tr><td>Opis: </td><td>" . $row['opis'] . "</td></tr>";
                 echo "<tr><td>Dodano: </td><td>" . $row['data_dodania'] . "</td></tr>";
                 echo "</table>";
-            }
+            } else if (isset($_POST['terminarzADD'])) {
+                $Tid = $_SESSION['id_nauczyciela'];
+                $sql = "SELECT imie, nazwisko, nazwa 
+                        FROM nauczyciele 
+                        INNER JOIN przedmioty ON nauczyciele.id_przedmiotu = przedmioty.id_przedmiotu
+                        WHERE id_nauczyciela = $Tid";
+                $result = $conn->query($sql . ';');
+                $row = $result->fetch_assoc();
+
+                // $rok = $_SESSION['rokDefault'];
+
+                // $miesiac = $_SESSION['miesiacDefault'];
+                // if ($miesiac < 10) {
+                //     $miesiac = '0' . $miesiac;
+                // }
+
+                // $dzien = $_POST['terminarzADD'];
+                // if ($dzien < 10) {
+                //     $dzien = '0' . $dzien;
+                // }
+
+                echo "<form method='POST' action='terminarzAdd.php'>";
+                echo "<table border='1'>";
+                echo "<tr><th colspan='2'>Dodaj wpis</th></tr>";
+                echo "<tr><td>Zakres: </td><td>";
+                echo "<input type='datetime-local' name='zakresS' value=''>";
+                echo " - <input type='datetime-local' name='zakresE'></tr>";
+                echo "<tr><td>Nauczyciel: </td><td>" . $row['imie'] . " " . $row['nazwisko'] . "</td></tr>";
+                echo "<tr><td>Przedmiot: </td><td>" . $row['nazwa'] . "</td></tr>";
+
+                echo "<tr><td>Rodzaj: </td><td>";
+
+                echo "<select name='typT'>";
+                echo "<option value='Sprawdzian'>Sprawdzian</option>";
+                echo "<option value='Kartkówka'>Kartkówka</option>";
+                echo "<option value='Nieobecność'>Nieobecność</option>"; 
+                echo "<option value='Zastępstwo'>Zastępstwo</option>";
+                echo "<option value='Informacja'>Informacja</option>"; 
+                echo "<option value='Inne'>Inne</option>"; 
+                echo "<option value='Wywiadówka'>Wywiadówka</option>";
+                echo "</select>";
+
+                echo "</td></tr>";
+
+                echo "<tr><td>Opis: </td><td><input name='opisT'></td></tr>";
+                echo "</table>";
+                echo "<input type='submit' name='TerAdd' value='dodaj'>";
+                echo "</form>";
+            } 
         ?>
     </form>
     

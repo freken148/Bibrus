@@ -36,8 +36,7 @@
                             nazwisko, 
                             nazwa,
                             typ_wydarzenia,
-                            DATEDIFF('$dateString', zakres_start) AS check_start,
-                            DATEDIFF(zakres_end, '$dateString') AS check_end,
+                            DATEDIFF(zakres_end, zakres_start) AS check1,
                             DATE_FORMAT(zakres_start, '%H:%i') AS time_start,
                             DATE_FORMAT(zakres_end, '%H:%i') AS time_end
                         FROM terminarz
@@ -63,15 +62,19 @@
                         // im fucking genius nahui 23:43 04.05.2026
                         echo $row['typ_wydarzenia'] . "<br>" . $row['nazwa'] . "<br>" . $row['imie'] . " " . $row['nazwisko']; 
 
-                        if ($row['check_start'] == $row['check_end']) {
+                        if ($row['check1'] == 0) {
                             echo "<br>Godziny: " . $row['time_start'] . " do " . $row['time_end'];  
                         }
-                        
-                        echo "<br><br><button name='terminarzRemove'>X</button>";
                         echo "</div>";
+                        echo "<label>";
+                        echo "X";
+                        echo "<input onchange='this.form.submit()' type='radio' name='terminarzREMOVE' value='$Wid' hidden>";
+                        echo "</label>";
                     }  
 
-                    echo "<br><button name='terminarzADD' formaction='terminarzInfoAdd.php'>+</button>";         
+                    $dayofmonth = $d-$firstDayMonth;
+                    echo "<br><button name='terminarzADD' formaction='terminarzInfoAdd.php' onclick='this.querySelector(\"input\").checked = true'>+</button>"; 
+                    echo "<input type='radio' name='terminarzAdd' value='$dayofmonth' hidden>";        
                     echo "</td>"; 
                 } else {
                     echo "<td></td>";
@@ -117,5 +120,35 @@
             $selected = ($selected_object == $start) ? "selected" : "";
             echo "<option value='" . $start . "'  $selected>" . $start . "</option>";
         }
+    }
+
+    function terminarzDodaj() {
+        global $conn;
+
+        $zakresS = $_POST['zakresS'];
+        $zakresE = $_POST['zakresE'];
+        $typT = $_POST['typT'];
+        $opisT = $_POST['opisT'];
+        $id_nauczyciela = $_SESSION['id_nauczyciela'];
+        $klasa = $_SESSION['klasaDefault'];
+
+        $sql = "SELECT przedmioty.id_przedmiotu FROM przedmioty
+                INNER JOIN nauczyciele ON przedmioty.id_przedmiotu = nauczyciele.id_przedmiotu
+                WHERE id_nauczyciela = $id_nauczyciela";
+        $result = $conn->query($sql . ';');
+        $row = $result->fetch_assoc();
+        $id_przedmiotu = $row['id_przedmiotu'];
+
+        $sql = "INSERT INTO terminarz (id_klasy, id_nauczyciela, id_przedmiotu, typ_wydarzenia, opis, zakres_start, zakres_end, data_dodania)
+                VALUES ($klasa, $id_nauczyciela, $id_przedmiotu, '$typT', '$opisT', '$zakresS', '$zakresE', NOW())";
+        $conn->query($sql . ';');
+    }
+
+    function terminarzRemove() {
+        global $conn;
+
+        $Wid = $_POST['terminarzREMOVE'];
+        $sql = "DELETE FROM terminarz WHERE id_wydarzenia = $Wid";
+        $conn->query($sql . ';');
     }
 ?>
