@@ -12,7 +12,8 @@ Shitty piece of code that should be **brus ripoff
 - - [x] Calendar
 - - [x] Fetching data from db and show to end user
 - - [x] Details view, when user click on the event
-- - [ ] Possibilty to add/remove events for teachers 
+- - [ ] Possibilty to add
+- - [ ] Possibility to remove
 - [ ] Changes in `plan_lekcji.php` when `Zastępstwo` or `Odwołanie` and teacher absent without replacement
 - [x] Add regexp to login fields
 - [x] Add student journal number
