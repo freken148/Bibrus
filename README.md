@@ -24,6 +24,7 @@ Shitty piece of code that should be **brus ripoff
 - [ ] Changing grades after rating
 - [ ] Login for students
 - [ ] Add classes for future work on appearence 
+- [ ] Change read-only requests to GET instead of POST everywhere
 - [ ] (M) Rewrite everything to more OOP way (now it's rather mix of procedural and OOP solutions, mainly procedural)
 - [ ] (M) Export all queries to separate file where it's been procedures which called by EXEC instead of whole query
 - [ ] (M) General refactoring
