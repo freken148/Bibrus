@@ -27,6 +27,7 @@ Shitty piece of code that should be **brus ripoff
 - [ ] (M) Rewrite everything to more OOP way (now it's rather mix of procedural and OOP solutions, mainly procedural)
 - [ ] (M) Export all queries to separate file where it's been procedures which called by EXEC instead of whole query
 - [ ] (M) General refactoring
+- [ ] (M) Code documentation
 - [ ] Whatever else that comes to my mind and be worth spent time
 
 O - optional
