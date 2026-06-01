@@ -43,14 +43,14 @@
         
         while($row = $result->fetch_assoc()) {
             $selected = ($row["id_klasy"] == $selected_object) ? "selected" : "";
-            echo "<option value='" . $row["id_klasy"] . "' $selected>" . $row["nazwa"] . "</option>";
+            echo "<option class='optionGlobal optionFrekwencja' value='" . $row["id_klasy"] . "' $selected>" . $row["nazwa"] . "</option>";
         }
     }
 
     function SelectUcznie() {
         global $conn, $selected_object;
 
-        $_SESSION['klasaDefault'] = $_POST['wybrana_klasa'] ?? 5;
+        $_SESSION['klasaDefault'] = $_POST['wybrana_klasa'] ?? 1;
         $selected_object = $_SESSION['klasaDefault'];
         
         $_SESSION['uczenDefault'] = $_POST['wybrany_uczen'] ?? 1;
@@ -66,7 +66,7 @@
         
         while($row = $result->fetch_assoc()) {
             $selected = ($row["id_ucznia"] == $uczenID) ? "selected" : "";
-            echo "<option value='" . $row['id_ucznia'] . "' $selected>" . $row['imie'] . ' ' . $row['nazwisko'] . ' ' . $row["nazwa"] . "</option>";
+            echo "<option class='optionGlobal optionFrekwencja' value='" . $row['id_ucznia'] . "' $selected>" . $row['imie'] . ' ' . $row['nazwisko'] . ' ' . $row["nazwa"] . "</option>";
         }
     }
 

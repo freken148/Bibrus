@@ -10,8 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Frekwencja</title>
 </head>
-<body>   
-    <form id="forma1" method="POST" action="frekwencja.php"> 
+<body class="bodyGlobal bodyFrekwencja">   
+    <form class="formGlobal formFrekwencja" method="POST" action="frekwencja.php"> 
         <?php 
             require "core/frekOcenyUni.php";
 
@@ -43,7 +43,7 @@
                     Wyszukaj();
 
                     if ($_POST['KlasaUczen'] == 'klasa') {
-                        echo "<button name='dodajPrzycisk'>dodaj</button>";
+                        echo "<button class='buttonGlobal buttonFrekwencja dodajButton' name='dodajPrzycisk'>dodaj</button>";
                     }
 
                     if ($_POST['KlasaUczen'] == 'uczen') {

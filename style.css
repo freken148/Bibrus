@@ -1,0 +1,2 @@
+.formUwagi .checkboxGlobal { display: none; }
+.formUwagi label.labelFrekwencja:has(.checkboxGlobal) { display: none; }

@@ -12,12 +12,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logowanie</title>
 </head>
-<body>
-    <form method="POST" action="logowanie.php">
-        <input name="imie" placeholder="imie" pattern="^[^\\]*$">
-        <input name="nazwisko" placeholder="nazwisko" pattern="^[^\\]*$">
-        <input name="haslo" type="password" placeholder="haslo" pattern="^[^\\]*$">
-        <button>Zaloguj</button>
+<body class="bodyGlobal bodyLogowanie">
+    <form class="formGlobal formLogowanie formLogin" method="POST" action="logowanie.php">
+        <input class="inputGlobal inputLogowanie inputLogin" name="imie" placeholder="imie" pattern="^[^\\]*$">
+        <input class="inputGlobal inputLogowanie inputLogin" name="nazwisko" placeholder="nazwisko" pattern="^[^\\]*$">
+        <input class="inputGlobal inputLogowanie inputLogin" name="haslo" type="password" placeholder="haslo" pattern="^[^\\]*$">
+        <button class="buttonGlobal buttonLogowanie submitButton">Zaloguj</button>
     </form>
 </body>
 </html>

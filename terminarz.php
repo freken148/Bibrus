@@ -18,24 +18,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terminarz</title>
 </head>
-<body>
-    <form method="POST" action="terminarz.php">
-        <select name="wybrana_klasa" onchange='this.form.submit()'>
+<body class="bodyGlobal bodyTerminarz">
+    <form class="formGlobal formTerminarz" method="POST" action="terminarz.php">
+        <select class="selectGlobal selectTerminarz" name="wybrana_klasa" onchange='this.form.submit()'>
             <?php
                 SelectKlasy();
             ?>
         </select>
-        <select name="wybrany_miesiac" onchange='this.form.submit()'>
+        <select class="selectGlobal selectTerminarz" name="wybrany_miesiac" onchange='this.form.submit()'>
             <?php
                 miesiacSelect();
             ?>
         </select>
-        <select name="wybrany_rok" onchange='this.form.submit()'>
+        <select class="selectGlobal selectTerminarz" name="wybrany_rok" onchange='this.form.submit()'>
             <?php
                 rokSelect();
             ?>
         </select>
-        <button name="glowna">Do głównej</button> 
+        <button class="buttonGlobal buttonTerminarz glownaButton" name="glowna">Do głównej</button> 
         <?php
             Init();
             ShowTerminarz();

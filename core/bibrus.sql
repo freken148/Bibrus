@@ -126,3 +126,14 @@ CREATE TABLE terminarz (
     FOREIGN KEY (id_nauczyciela) REFERENCES nauczyciele(id_nauczyciela),
     FOREIGN KEY (id_przedmiotu) REFERENCES przedmioty(id_przedmiotu)
 );
+
+CREATE TABLE Uwagi (
+    id_uwagi INT PRIMARY KEY AUTO_INCREMENT,
+    id_ucznia INT,
+    id_nauczyciela INT,
+    typ ENUM('Pozytywna', 'Negatywna'),
+    opis VARCHAR(1000),
+    data DATETIME(0),
+    FOREIGN KEY (id_ucznia) REFERENCES Uczniowie(id_ucznia),
+    FOREIGN KEY (id_nauczyciela) REFERENCES Nauczyciele(id_nauczyciela)
+);

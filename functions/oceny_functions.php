@@ -16,7 +16,7 @@
                 INNER JOIN uczniowie ON klasy.id_klasy = uczniowie.id_klasy 
                 WHERE $klasa";
 
-        echo "<table border='1'>";
+        echo "<table class='tableGlobal tableOceny tableKlasa' border='1'>";
         echo "<tr><th>Wychowawca</th><th>Klasa</th><th>Ilość uczniów</th><th>Srednia klasy</th></tr>";
 
         $result = $conn->query($sql . ';');
@@ -40,7 +40,7 @@
                 GROUP BY uczniowie.id_ucznia 
                 ORDER BY nazwa";
 
-        echo "<table border='1'>";
+        echo "<table class='tableGlobal tableOceny tableWyszukaj' border='1'>";
         echo "<tr>";
         if ($_POST['KlasaUczen'] == 'klasa') { 
             echo "<th>Nr.</th>";
@@ -75,11 +75,11 @@
 
                     echo "<td>" . $FullOceny . "</td>";
                     echo "<td>" . number_format($row['Srednia_ucznia'], 2, '.') . "</td>";
-                    echo "<td><input maxlength='1000' placeholder='komentarz' name='komentarz[$uczenID]'></td>";
-                    echo "<td><select name='ocena[$uczenID]'>";
+                    echo "<td><input class='inputGlobal inputOceny' maxlength='1000' placeholder='komentarz' name='komentarz[$uczenID]'></td>";
+                    echo "<td><select class='selectGlobal selectOceny' name='ocena[$uczenID]'>";
                     ocenaSelect();
                     echo "</select></td>";
-                    echo "<td><select name='waga[$uczenID]'>"; 
+                    echo "<td><select class='selectGlobal selectOceny' name='waga[$uczenID]'>"; 
                     wagaSelect();
                     echo "</select></td>";
                 echo "</tr>";
@@ -111,7 +111,7 @@
 
     function UczenOceny() {
         global $conn, $fetchKlasa, $fetchUczen;
-        echo "<table border='1'>";
+        echo "<table class='tableGlobal tableOceny tableUczen' border='1'>";
         echo "<tr><th>Nauczyciel</th><th>Przedmiot</th><th>Data i czas</th><th>Ocena</th><th>Waga</th><th>Komentarz</th></tr>";
         $fetchKlasa = $_POST['wybrana_klasa'] ?? 0;
         $fetchUczen = $_POST['wybrany_uczen'] ?? 0;
@@ -138,7 +138,7 @@
                 echo "<td>" . $row["komentarz"] . "</td>";
 
                 if ($row['id_nauczyciela'] == $_SESSION['id_nauczyciela']) {
-                    echo "<td><button value = '" . $row['id_oceny'] . "' name='usun'>Usuń</button></td>"; 
+                    echo "<td><button class='buttonGlobal buttonOceny removeButton' value = '" . $row['id_oceny'] . "' name='usun'>Usuń</button></td>"; 
                 }
                 echo "</tr>";
             }
@@ -146,7 +146,7 @@
             echo "<td colspan='6'>Brak ocen wpisanych</td>";
         }
         echo "</table>";
-        echo "<button name='dodajPrzycisk'>dodaj</button>";
+        echo "<button class='buttonGlobal buttonOceny dodajButton' name='dodajPrzycisk'>dodaj</button>";
     }
 
     function WedlugPrzedmiotow_Klasa() {
@@ -164,7 +164,7 @@
                     GROUP BY przedmioty.id_przedmiotu
                     ORDER BY przedmioty.nazwa";
 
-        echo "<table border='1'><tr><th>Przedmiot</th><th>Srednia klasy</th></tr>";
+        echo "<table class='tableGlobal tableOceny tableWedlugPrzedmiotow' border='1'><tr><th>Przedmiot</th><th>Srednia klasy</th></tr>";
         $result = $conn->query($sql . ';');
         while($row = $result->fetch_assoc()) {
             echo "<tr><td>" . $row['nazwa'] . "</td>" . "<td>" . number_format($row['Srednia_klasy'], 2, '.') . "</td></tr>";
@@ -189,7 +189,7 @@
                 GROUP BY id_przedmiotu
                 ORDER BY nazwa";
 
-        echo "<table border='1'><tr><th>Przedmiot</th><th>Oceny</th><th>Srednia ucznia</th></tr>";
+        echo "<table class='tableGlobal tableOceny tableWedlugPrzedmiotow' border='1'><tr><th>Przedmiot</th><th>Oceny</th><th>Srednia ucznia</th></tr>";
         $result = $conn->query($sql . ';');
         while($row = $result->fetch_assoc()) {
             echo "<tr><td>" . $row['nazwa'] . "</td>";
@@ -257,18 +257,18 @@
         $sql = "SELECT wartosc, ocena FROM ocenydictionary";
 
         $result = $conn->query($sql . ';');
-        echo "<option value='-1'>Ocena</option>";
+        echo "<option class='optionGlobal optionOceny' value='-1'>Ocena</option>";
         while($row = $result->fetch_assoc()) {
-            echo "<option value='" . $row['wartosc'] . "'>" . $row['ocena'] . "</option>";
+            echo "<option class='optionGlobal optionOceny' value='" . $row['wartosc'] . "'>" . $row['ocena'] . "</option>";
         }
     }
 
     function wagaSelect() {
         global $conn;
         $i = 1;
-        echo "<option value='-1'>Waga</option>";
+        echo "<option class='optionGlobal optionOceny' value='-1'>Waga</option>";
         while($i < 6) {
-            echo "<option value='$i'>$i</option>";
+            echo "<option class='optionGlobal optionOceny' value='$i'>$i</option>";
             $i++;
         }
     }

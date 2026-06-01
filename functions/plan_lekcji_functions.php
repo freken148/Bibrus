@@ -2,7 +2,7 @@
     function ShowPlan() {
         global $conn, $fetchKlasa;
     
-        echo "<table border='1'>";
+        echo "<table class='tableGlobal tablePlanLekcji tableTerminarzCalendar' border='1'>";
         echo "<tr> <th>Nr. lekcji</th> <th>Godziny</th> <th>Poniedziałek</th> <th>Wtorek</th> <th>Środa</th> <th>Czwartek</th> <th>Piątek</th> <th>Sobota</th> <th>Niedziela</th> </tr>";
         for ($i = 1; $i < 15; $i++) {
             $sql = "SELECT numer_lekcji, godzina_lekcji AS godzina_start, DATE_ADD(godzina_lekcji, INTERVAL 45 MINUTE) AS godzina_end

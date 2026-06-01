@@ -3,7 +3,7 @@
         global $conn;
         $fetchKlasa = $_POST['wybrana_klasa'] ?? '';
         $klasa = "klasy.id_klasy = $fetchKlasa";
-
+        
         $sql = "SELECT 
                     nauczyciele.imie, 
                     nauczyciele.nazwisko, 
@@ -16,7 +16,7 @@
                 INNER JOIN frekwencja ON uczniowie.id_ucznia = frekwencja.id_ucznia
                 WHERE $klasa";
 
-        echo "<table border='1'>";
+        echo "<table class='tableGlobal tableFrekwencja tableKlasa' border='1'>";
         echo "<tr><th>Wychowawca</th><th>Klasa</th><th>Ilość uczniów</th><th>Frekwencja klasy</th></tr>";
 
         $result = $conn->query($sql . ';');
@@ -43,7 +43,7 @@
                 WHERE $warunek
                 GROUP BY uczniowie.id_ucznia";
 
-        echo "<table border='1'>";
+        echo "<table class='tableGlobal tableFrekwencja tableWyszukaj' border='1'>";
         echo "<tr>";
         if ($_POST['KlasaUczen'] == 'klasa') { 
             echo "<th>Nr.</th>";
@@ -93,7 +93,8 @@
 
     function UczenOceny() {
         global $conn, $fetchKlasa, $fetchUczen;
-        echo "<table border='1'>";
+        echo "<button class='buttonGlobal buttonFrekwencja dodajButton' name='dodajPrzycisk'>dodaj</button>";
+        echo "<table class='tableGlobal tableFrekwencja tableUczen' border='1'>";
         echo "<tr><th>Przedmiot</th><th>Data i czas</th><th>Typ</th></tr>";
         $fetchKlasa = $_POST['wybrana_klasa'] ?? 0;
         $fetchUczen = $_POST['wybrany_uczen'] ?? 0;
@@ -113,14 +114,13 @@
                 echo "<td>" . $row["data"] . "</td>";
                 echo "<td>" . $row["typ"] . "</td>";
                 
-                echo "<td><button value = '" . $row['id_obecnosci'] . "' name='usun'>Usuń</button></td>"; 
+                echo "<td><button class='buttonGlobal buttonFrekwencja removeButton' value = '" . $row['id_obecnosci'] . "' name='usun'>Usuń</button></td>"; 
                 echo "</tr>";
             }
         } else {
             echo "<td colspan='3'>Brak obecnosci wpisanych</td>";
         }
         echo "</table>";
-        echo "<button name='dodajPrzycisk'>dodaj</button>";
     }
 
     function WedlugPrzedmiotow_Klasa() {
@@ -140,7 +140,7 @@
                 GROUP BY przedmioty.id_przedmiotu
                 ORDER BY przedmioty.nazwa";
 
-        echo "<table border='1'><tr><th>Przedmiot</th><th>Srednia</th></tr>";
+        echo "<table class='tableGlobal tableFrekwencja tableWedlugPrzedmiotow' border='1'><tr><th>Przedmiot</th><th>Srednia</th></tr>";
         $result = $conn->query($sql . ';');
         while($row = $result->fetch_assoc()) {
             echo "<tr><td>" . $row['nazwa'] . "</td>" . "<td>" . number_format($row['Srednia_frekwencji'], 2, '.') . "</td></tr>";
@@ -161,7 +161,7 @@
                 GROUP BY przedmioty.id_przedmiotu
                 ORDER BY przedmioty.nazwa";
 
-        echo "<table border='1'><tr><th>Przedmiot</th><th>Srednia</th></tr>";
+        echo "<table class='tableGlobal tableFrekwencja tableWedlugPrzedmiotow' border='1'><tr><th>Przedmiot</th><th>Srednia</th></tr>";
         $result = $conn->query($sql . ';');
         while($row = $result->fetch_assoc()) {
             echo "<tr><td>" . $row['nazwa'] . "</td>" . "<td>" . number_format($row['Srednia_frekwencji'], 2, '.') . "</td></tr>";
@@ -202,11 +202,9 @@
     function frekSelect($z) {
         global $conn;
 
-        $sql = "SELECT DISTINCT typ FROM frekwencja";
-
-        $result = $conn->query($sql . ';');
-        while($row = $result->fetch_assoc()) {
-            echo "<td><input type='radio' name='$z' value='" . $row['typ'] . "'></td>";
+        $typ = array('Obecny', 'Spóźniony', 'Zwolniony', 'Usprawiedliwiony', 'Nieobecny');
+        for ($i = 0; $i < 5; $i++) {
+            echo "<td><input class='inputGlobal inputFrekwencja radioGlobal' type='radio' name='$z' value='" . $typ[$i] . "'></td>";
         }
     }
 ?>

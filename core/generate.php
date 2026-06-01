@@ -1,243 +1,325 @@
 <?php
-// Prevent timeout for large data generation
-set_time_limit(0);
+/**
+ * Database Seeder for bibrus database
+ * 
+ * Instructions:
+ * 1. Ensure your database tables are created.
+ * 2. Configure the database connection variables below.
+ * 3. Run this script via CLI (`php seeder.php`) or in your browser.
+ */
 
-// ==========================================
-// DATABASE CONFIGURATION
-// ==========================================
-$host = '127.0.0.1';
-$db   = 'bibrus'; // Make sure this matches your DB name
-$user = 'root';   
-$pass = '';       
-$charset = 'utf8mb4';
+// --- CONFIGURATION ---
+$dbHost = '127.0.0.1';
+$dbName = 'bibrus';
+$dbUser = 'root';        // Change if needed
+$dbPass = '';            // Change if needed
+$dbChar = 'utf8mb4';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+// --- DATA VOLUME SETTINGS ---
+$numClasses = 6;            // e.g., 1A, 1B, 2A, 2B, 3A, 3B
+$studentsPerClass = 25;     // Total students = $numClasses * $studentsPerClass
+$gradesPerStudent = 15;     // Number of grades each student will receive
+$attendancePerStudent = 40; // Number of attendance records per student
+$eventsPerClass = 5;        // Number of calendar entries in 'terminarz' per class
+$remarksCount = 60;         // Total school remarks across all students
+
+// --- SEED LISTS (POLISH) ---
+$firstNamesMale = ['Jan', 'Piotr', 'Krzysztof', 'Andrzej', 'Tomasz', 'Paweł', 'Marcin', 'Michał', 'Jakub', 'Wojciech', 'Adam', 'Łukasz', 'Marek', 'Grzegorz', 'Mateusz', 'Kamil', 'Mariusz', 'Szymon', 'Maciej', 'Sebastian'];
+$firstNamesFemale = ['Anna', 'Maria', 'Katarzyna', 'Małgorzata', 'Agnieszka', 'Barbara', 'Ewa', 'Krystyna', 'Magdalena', 'Elżbieta', 'Joanna', 'Aleksandra', 'Zofia', 'Monika', 'Marta', 'Patrycja', 'Natalia', 'Karolina', 'Sandra', 'Alicja'];
+$lastNamesMale = ['Nowak', 'Kowalski', 'Wiśniewski', 'Wójcik', 'Kowalczyk', 'Kamiński', 'Lewandowski', 'Zieliński', 'Szymański', 'Woźniak', 'Kozłowski', 'Jankowski', 'Mazur', 'Wojciechowski', 'Kwiatkowski', 'Krawczyk', 'Kaczmarek', 'Piotrowski', 'Grabowski', 'Pawłowski'];
+$lastNamesFemale = ['Nowak', 'Kowalska', 'Wiśniewska', 'Wójcik', 'Kowalczyk', 'Kamińska', 'Lewandowska', 'Zielińska', 'Szymańska', 'Woźniak', 'Kozłowska', 'Jankowska', 'Mazur', 'Wojciechowska', 'Kwiatkowska', 'Krawczyk', 'Kaczmarek', 'Piotrowska', 'Grabowska', 'Pawłowska'];
+
+$subjects = [
+    'Język polski', 'Matematyka', 'Język angielski', 'Język niemiecki',
+    'Fizyka', 'Chemia', 'Biologia', 'Geografia', 'Historia',
+    'Informatyka', 'Wychowanie fizyczne', 'Wiedza o społeczeństwie'
+];
+
+// Passed as strings to prevent strict Float precision FK constraint errors in PDO/MySQL
+$validGrades = ['1', '1.5', '2', '2.5', '1.75', '3', '3.5', '2.75', '4', '4.5', '3.75', '5', '5.5', '4.75', '6', '5.75'];
+
+$gradeComments = [
+    'Aktywność na lekcji', 'Sprawdzian pisemny', 'Kartkówka', 'Praca domowa', 
+    'Odpowiedź ustna', 'Projekt grupowy', 'Praca klasowa', 'Przygotowanie do lekcji'
+];
+
+$remarkTextsPositive = [
+    'Wzorowa postawa podczas reprezentowania szkoły na zewnątrz.',
+    'Bardzo duże zaangażowanie w pomoc przy organizacji szkolnego kiermaszu.',
+    'Pomoc koledze w nauce trudnego tematu.',
+    'Aktywny udział w dyskusji lekcyjnej i przygotowanie dodatkowych materiałów.',
+    'Uczciwe zachowanie i zgłoszenie zgubionego przedmiotu.'
+];
+
+$remarkTextsNegative = [
+    'Przeszkadzanie w prowadzeniu lekcji mimo wielokrotnych uwag.',
+    'Korzystanie z telefonu komórkowego podczas sprawdzianu.',
+    'Brak przygotowania do zajęć oraz brak podręczników.',
+    'Niewłaściwe zachowanie wobec rówieśników na przerwie.',
+    'Spóźnienie na lekcję bez usprawiedliwienia oraz lekceważący stosunek.'
 ];
 
 try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (\PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
-}
-
-// ==========================================
-// MOCK DATA ARRAYS
-// ==========================================
-$firstNamesMale = ['Jan', 'Piotr', 'Krzysztof', 'Andrzej', 'Tomasz', 'Michał', 'Marcin', 'Jakub', 'Adam', 'Stanisław', 'Maciej', 'Kamil', 'Kacper', 'Szymon'];
-$firstNamesFemale = ['Anna', 'Maria', 'Katarzyna', 'Małgorzata', 'Agnieszka', 'Krystyna', 'Barbara', 'Ewa', 'Elżbieta', 'Zofia', 'Julia', 'Maja', 'Zuzanna', 'Hanna'];
-$lastNames = ['Nowak', 'Kowalski', 'Wiśniewski', 'Wójcik', 'Kowalczyk', 'Kamiński', 'Lewandowski', 'Zieliński', 'Szymański', 'Woźniak', 'Dąbrowski', 'Kozłowski', 'Jankowski', 'Mazur', 'Wojciechowski'];
-$subjects = ['Matematyka', 'Język polski', 'Język angielski', 'Fizyka', 'Chemia', 'Biologia', 'Geografia', 'Historia', 'Wychowanie fizyczne', 'Informatyka', 'Muzyka', 'Plastyka'];
-$classNames = ['1A', '1B', '1C', '2A', '2B', '2C', '3A', '3B', '3C', '4A', '4B', '4C'];
-
-// Days 1-5 correspond to Poniedziałek - Piątek in your dnitygodnia table
-$schoolDays = [1, 2, 3, 4, 5]; 
-
-$gradeValues = [1, 1.5, 2, 2.5, 1.75, 3, 3.5, 2.75, 4, 4.5, 3.75, 5, 5.5, 4.75, 6, 5.75];
-$gradeComments = ['Sprawdzian', 'Kartkówka', 'Odpowiedź ustna', 'Praca domowa', 'Aktywność', 'Projekt', 'Brak zadania', 'Złe zachowanie'];
-
-$terminarzTypes = ['Sprawdzian', 'Kartkówka', 'Nieobecność', 'Zastępstwo', 'Informacja', 'Inne', 'Wywiadówka'];
-$terminarzDescriptions = [
-    'Sprawdzian' => ['Sprawdzian z rozdziału 2', 'Test podsumowujący semestr', 'Sprawdzian wiedzy ogólnej'],
-    'Kartkówka' => ['Szybka kartkówka ze słówek', 'Kartkówka z 3 ostatnich lekcji', 'Niezapowiedziana kartkówka'],
-    'Nieobecność' => ['L4 - zwolnienie lekarskie', 'Wyjazd na szkolenie', 'Opieka nad dzieckiem', 'Urlop okolicznościowy'],
-    'Zastępstwo' => ['Zastępstwo z inną klasą', 'Zajęcia świetlicowe w ramach zastępstwa', 'Projekcja filmu dokumentalnego'],
-    'Informacja' => ['Przynieść przybory geometryczne', 'Zbiórka pieniędzy na radę rodziców', 'Termin oddania projektów'],
-    'Inne' => ['Wycieczka szkolna', 'Apel z okazji Święta Niepodległości', 'Dzień Sportu', 'Próbna ewakuacja'],
-    'Wywiadówka' => ['Spotkanie z rodzicami', 'Omówienie wyników po pierwszym semestrze', 'Dzień Otwarty']
-];
-
-// ==========================================
-// HELPER FUNCTIONS
-// ==========================================
-function getRandom($array) { return $array[array_rand($array)]; }
-
-// Advanced date generator prioritizing the 2025-2026 school year
-function generateTimestamp() {
-    $rand = rand(1, 100);
-    if ($rand <= 85) {
-        // 85% chance: School Year (Sept 2025 - June 2026)
-        $start = strtotime('2025-09-01 08:00:00');
-        $end = strtotime('2026-06-30 15:00:00');
-    } elseif ($rand <= 92) {
-        // 7% chance: Outlier Past (e.g. 2023 - mid 2025)
-        $start = strtotime('2023-01-01 08:00:00');
-        $end = strtotime('2025-08-31 23:59:59');
-    } else {
-        // 8% chance: Outlier Future (July 2026 - Dec 2027)
-        $start = strtotime('2026-07-01 08:00:00');
-        $end = strtotime('2027-12-31 23:59:59');
+    $dsn = "mysql:host=$dbHost;dbname=$dbName;charset=$dbChar";
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false, // Ensures accurate type binding
+    ];
+    $pdo = new PDO($dsn, $dbUser, $dbPass, $options);
+    
+    echo "Connection to the database established.\n<br>";
+    
+    // Start transaction for high insertion speed
+    $pdo->beginTransaction();
+    
+    // 1. INSERT SUBJECTS (Przedmioty)
+    echo "Inserting subjects...\n<br>";
+    $stmtSubject = $pdo->prepare("INSERT INTO Przedmioty (nazwa) VALUES (:nazwa)");
+    $subjectIds = [];
+    foreach ($subjects as $sub) {
+        $stmtSubject->execute([':nazwa' => $sub]);
+        $subjectIds[] = $pdo->lastInsertId();
     }
-    return rand($start, $end);
-}
-
-echo "Starting massive data generation...\n";
-
-// 1. PRZEDMIOTY
-echo "1/8 Generating Przedmioty...\n";
-foreach ($subjects as $subject) {
-    // IGNORE prevents error if you run the script twice
-    $pdo->exec("INSERT IGNORE INTO Przedmioty (nazwa) VALUES ('$subject')");
-}
-$subjectIds = $pdo->query("SELECT id_przedmiotu FROM Przedmioty")->fetchAll(PDO::FETCH_COLUMN);
-
-// 2. NAUCZYCIELE
-echo "2/8 Generating Nauczyciele...\n";
-$stmt = $pdo->prepare("INSERT INTO Nauczyciele (imie, nazwisko, id_przedmiotu, Haslo) VALUES (?, ?, ?, 'Sala332!')");
-$pdo->beginTransaction();
-for ($i = 0; $i < 25; $i++) {
-    $isMale = rand(0, 1);
-    $firstName = $isMale ? getRandom($firstNamesMale) : getRandom($firstNamesFemale);
-    $lastName = getRandom($lastNames) . ($isMale ? '' : 'a');
-    $stmt->execute([$firstName, $lastName, getRandom($subjectIds)]);
-}
-$pdo->commit();
-$teacherIds = $pdo->query("SELECT id_nauczyciela FROM Nauczyciele")->fetchAll(PDO::FETCH_COLUMN);
-$teachersWithSubjects = $pdo->query("SELECT id_nauczyciela, id_przedmiotu FROM Nauczyciele")->fetchAll();
-
-// 3. KLASY
-echo "3/8 Generating Klasy...\n";
-$stmt = $pdo->prepare("INSERT INTO Klasy (id_wychowawcy, nazwa) VALUES (?, ?)");
-$pdo->beginTransaction();
-$availableTeachers = $teacherIds;
-shuffle($availableTeachers);
-foreach ($classNames as $index => $className) {
-    $tutorId = $availableTeachers[$index % count($availableTeachers)];
-    $stmt->execute([$tutorId, $className]);
-}
-$pdo->commit();
-$classIds = $pdo->query("SELECT id_klasy FROM Klasy")->fetchAll(PDO::FETCH_COLUMN);
-
-// 4. UCZNIOWIE
-echo "4/8 Generating Uczniowie (approx " . (count($classIds) * 25) . " students)...\n";
-$stmt = $pdo->prepare("INSERT INTO Uczniowie (id_klasy, imie, nazwisko) VALUES (?, ?, ?)");
-$pdo->beginTransaction();
-foreach ($classIds as $classId) {
-    $studentCount = rand(20, 30);
-    for ($i = 0; $i < $studentCount; $i++) {
-        $isMale = rand(0, 1);
-        $firstName = $isMale ? getRandom($firstNamesMale) : getRandom($firstNamesFemale);
-        $lastName = getRandom($lastNames) . ($isMale ? '' : 'a');
-        $stmt->execute([$classId, $firstName, $lastName]);
+    
+    // 2. INSERT TEACHERS (Nauczyciele)
+    echo "Inserting teachers...\n<br>";
+    $stmtTeacher = $pdo->prepare("INSERT INTO Nauczyciele (id_przedmiotu, imie, nazwisko, Haslo) VALUES (:id_przedmiotu, :imie, :nazwisko, :haslo)");
+    $teacherIds = [];
+    $teacherToSubjectMap = []; // In-memory map for blazing fast lookup later
+    
+    // Ensure we have at least one teacher per subject
+    foreach ($subjectIds as $subId) {
+        $gender = rand(0, 1) === 0 ? 'male' : 'female';
+        $name = ($gender === 'male') ? $firstNamesMale[array_rand($firstNamesMale)] : $firstNamesFemale[array_rand($firstNamesFemale)];
+        $surname = ($gender === 'male') ? $lastNamesMale[array_rand($lastNamesMale)] : $lastNamesFemale[array_rand($lastNamesFemale)];
+        
+        $stmtTeacher->execute([
+            ':id_przedmiotu' => $subId,
+            ':imie' => $name,
+            ':nazwisko' => $surname,
+            ':haslo' => 'Sala332!'
+        ]);
+        $tId = $pdo->lastInsertId();
+        $teacherIds[] = $tId;
+        $teacherToSubjectMap[$tId] = $subId;
     }
-}
-$pdo->commit();
-$studentIds = $pdo->query("SELECT id_ucznia, id_klasy FROM Uczniowie")->fetchAll();
+    
+    // Add extra teachers (shared subjects)
+    for ($i = 0; $i < 5; $i++) {
+        $gender = rand(0, 1) === 0 ? 'male' : 'female';
+        $name = ($gender === 'male') ? $firstNamesMale[array_rand($firstNamesMale)] : $firstNamesFemale[array_rand($firstNamesFemale)];
+        $surname = ($gender === 'male') ? $lastNamesMale[array_rand($lastNamesMale)] : $lastNamesFemale[array_rand($lastNamesFemale)];
+        $subId = $subjectIds[array_rand($subjectIds)];
+        
+        $stmtTeacher->execute([
+            ':id_przedmiotu' => $subId,
+            ':imie' => $name,
+            ':nazwisko' => $surname,
+            ':haslo' => 'Sala332!'
+        ]);
+        $tId = $pdo->lastInsertId();
+        $teacherIds[] = $tId;
+        $teacherToSubjectMap[$tId] = $subId;
+    }
 
-// 5. PLAN LEKCJI (FIXED!)
-echo "5/8 Generating Plan Lekcji...\n";
-$stmt = $pdo->prepare("INSERT INTO planLekcji (id_klasy, id_nauczyciela, id_przedmiotu, numer_lekcji, numer_sali, numer_dnia) VALUES (?, ?, ?, ?, ?, ?)");
-$pdo->beginTransaction();
-foreach ($classIds as $classId) {
-    foreach ($schoolDays as $numer_dnia) { // Loops 1 to 5 (Mon to Fri)
-        $lessonsCount = rand(5, 8); // Max 8 lessons a day to respect your LekcjeDictionary max bounds realistically
-        for ($lessonNum = 1; $lessonNum <= $lessonsCount; $lessonNum++) {
-            $teacher = getRandom($teachersWithSubjects);
-            $room = rand(100, 315);
-            $stmt->execute([$classId, $teacher['id_nauczyciela'], $teacher['id_przedmiotu'], $lessonNum, $room, $numer_dnia]);
+    // 3. INSERT CLASSES (Klasy)
+    echo "Inserting classes...\n<br>";
+    $stmtClass = $pdo->prepare("INSERT INTO Klasy (id_wychowawcy, nazwa) VALUES (:id_wychowawcy, :nazwa)");
+    
+    $classIds = [];
+    $yearPrefix = 1;
+    $letterIndex = 0;
+    $letters = ['A', 'B', 'C', 'D'];
+    
+    for ($i = 0; $i < $numClasses; $i++) {
+        $className = $yearPrefix . $letters[$letterIndex];
+        $wychowawcaId = $teacherIds[array_rand($teacherIds)]; 
+        
+        $stmtClass->execute([
+            ':id_wychowawcy' => $wychowawcaId,
+            ':nazwa' => $className
+        ]);
+        $classIds[] = $pdo->lastInsertId();
+        
+        $letterIndex++;
+        if ($letterIndex >= count($letters)) {
+            $letterIndex = 0;
+            $yearPrefix++;
         }
     }
-}
-$pdo->commit();
 
-// 6. OCENY
-echo "6/8 Generating Oceny (3000 records)...\n";
-$stmt = $pdo->prepare("INSERT INTO Oceny (id_ucznia, id_przedmiotu, id_nauczyciela, data, ocena, waga, komentarz) VALUES (?, ?, ?, ?, ?, ?, ?)");
-$pdo->beginTransaction();
-for ($i = 0; $i < 3000; $i++) {
-    $student = getRandom($studentIds);
-    $teacher = getRandom($teachersWithSubjects);
-    $grade = getRandom($gradeValues);
-    $weight = rand(1, 5); // Matches your CHECK (waga >= 1 && waga <= 5)
-    $comment = (rand(1,10) > 3) ? getRandom($gradeComments) : '';
-    $date = date("Y-m-d H:i:s", generateTimestamp());
+    // 4. INSERT STUDENTS (Uczniowie)
+    echo "Inserting students...\n<br>";
+    $stmtStudent = $pdo->prepare("INSERT INTO Uczniowie (id_klasy, imie, nazwisko) VALUES (:id_klasy, :imie, :nazwisko)");
+    $studentIds = [];
     
-    $stmt->execute([$student['id_ucznia'], $teacher['id_przedmiotu'], $teacher['id_nauczyciela'], $date, $grade, $weight, $comment]);
-}
-$pdo->commit();
-
-// 7. FREKWENCJA
-echo "7/8 Generating Frekwencja (5000 records)...\n";
-$stmt = $pdo->prepare("INSERT INTO Frekwencja (id_ucznia, id_przedmiotu, data, typ) VALUES (?, ?, ?, ?)");
-$pdo->beginTransaction();
-for ($i = 0; $i < 5000; $i++) {
-    $student = getRandom($studentIds);
-    $subjectId = getRandom($subjectIds);
-    $date = date("Y-m-d H:i:s", generateTimestamp());
-    
-    $randNum = rand(1, 100);
-    if ($randNum <= 80) $type = 'Obecny';
-    elseif ($randNum <= 85) $type = 'Usprawiedliwiony';
-    elseif ($randNum <= 90) $type = 'Nieobecny';
-    elseif ($randNum <= 95) $type = 'Spóźniony';
-    else $type = 'Zwolniony';
-
-    $stmt->execute([$student['id_ucznia'], $subjectId, $date, $type]);
-}
-$pdo->commit();
-
-// 8. TERMINARZ
-echo "8/8 Generating Terminarz (1000 events with dynamic durations)...\n";
-$stmt = $pdo->prepare("INSERT INTO terminarz (id_klasy, id_nauczyciela, id_przedmiotu, typ_wydarzenia, opis, zakres_start, zakres_end, data_dodania) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-$pdo->beginTransaction();
-
-for ($i = 0; $i < 1000; $i++) {
-    $classId = getRandom($classIds);
-    $teacher = getRandom($teachersWithSubjects);
-    $type = getRandom($terminarzTypes);
-    $desc = getRandom($terminarzDescriptions[$type]);
-    
-    $startTs = generateTimestamp();
-    $endTs = $startTs;
-
-    // Durations logic
-    switch ($type) {
-        case 'Sprawdzian':
-        case 'Kartkówka':
-            $endTs = $startTs + rand(30*60, 45*60); // 30 to 45 mins
-            break;
-        case 'Zastępstwo':
-            $endTs = $startTs + rand(45*60, 120*60); // 45 mins to 2 hrs
-            break;
-        case 'Wywiadówka':
-            $endTs = $startTs + rand(60*60, 180*60); // 1 to 3 hrs
-            break;
-        case 'Nieobecność':
-            $endTs = $startTs + rand(1*24*60*60, 60*24*60*60); // 1 day to 2 months
-            break;
-        case 'Informacja':
-        case 'Inne':
-            $randDuration = rand(1, 100);
-            if ($randDuration <= 50) {
-                $endTs = $startTs + rand(60*60, 24*60*60); // Hours to 1 day
-            } elseif ($randDuration <= 80) {
-                $endTs = $startTs + rand(2*24*60*60, 14*24*60*60); // 2 days to 2 weeks
-            } else {
-                $endTs = $startTs + rand(30*24*60*60, 150*24*60*60); // 1 to 5 months
-            }
-            break;
+    foreach ($classIds as $classId) {
+        for ($s = 0; $s < $studentsPerClass; $s++) {
+            $gender = rand(0, 1) === 0 ? 'male' : 'female';
+            $name = ($gender === 'male') ? $firstNamesMale[array_rand($firstNamesMale)] : $firstNamesFemale[array_rand($firstNamesFemale)];
+            $surname = ($gender === 'male') ? $lastNamesMale[array_rand($lastNamesMale)] : $lastNamesFemale[array_rand($lastNamesFemale)];
+            
+            $stmtStudent->execute([
+                ':id_klasy' => $classId,
+                ':imie' => $name,
+                ':nazwisko' => $surname
+            ]);
+            $studentIds[] = $pdo->lastInsertId();
+        }
     }
 
-    $addedTs = $startTs - rand(1*24*60*60, 14*24*60*60);
+    // 5. INSERT SCHEDULE (Plan Lekcji)
+    echo "Inserting timetables (planLekcji)...\n<br>";
+    $stmtPlan = $pdo->prepare("INSERT INTO planLekcji (id_klasy, id_nauczyciela, id_przedmiotu, numer_lekcji, numer_sali, numer_dnia) VALUES (:id_klasy, :id_nauczyciela, :id_przedmiotu, :numer_lekcji, :numer_sali, :numer_dnia)");
+    
+    foreach ($classIds as $classId) {
+        for ($day = 1; $day <= 5; $day++) {
+            $numLessonsToday = rand(4, 7); // 4 to 7 lessons per day
+            for ($lessonNum = 1; $lessonNum <= $numLessonsToday; $lessonNum++) {
+                $randTeacherId = $teacherIds[array_rand($teacherIds)];
+                $teacherSub = $teacherToSubjectMap[$randTeacherId];
+                
+                $stmtPlan->execute([
+                    ':id_klasy' => $classId,
+                    ':id_nauczyciela' => $randTeacherId,
+                    ':id_przedmiotu' => $teacherSub,
+                    ':numer_lekcji' => $lessonNum, // References LekcjeDictionary 1-14
+                    ':numer_sali' => rand(101, 315),
+                    ':numer_dnia' => $day // References dnitygodnia 1-5 (Mon-Fri)
+                ]);
+            }
+        }
+    }
 
-    $startStr = date("Y-m-d H:i:s", $startTs);
-    $endStr = date("Y-m-d H:i:s", $endTs);
-    $addedStr = date("Y-m-d H:i:s", $addedTs);
+    // 6. INSERT GRADES (Oceny)
+    echo "Inserting grades (oceny)...\n<br>";
+    $stmtGrade = $pdo->prepare("INSERT INTO Oceny (id_ucznia, id_przedmiotu, id_nauczyciela, data, ocena, waga, komentarz) VALUES (:id_ucznia, :id_przedmiotu, :id_nauczyciela, :data, :ocena, :waga, :komentarz)");
 
-    $stmt->execute([
-        $classId, 
-        $teacher['id_nauczyciela'], 
-        $teacher['id_przedmiotu'], 
-        $type, 
-        $desc, 
-        $startStr, 
-        $endStr, 
-        $addedStr
-    ]);
+    foreach ($studentIds as $studentId) {
+        for ($g = 0; $g < $gradesPerStudent; $g++) {
+            $tId = array_rand($teacherToSubjectMap);
+            $pId = $teacherToSubjectMap[$tId];
+            
+            $timestamp = rand(strtotime('-5 months'), time());
+            $date = date('Y-m-d H:i:s', $timestamp);
+            $ocena = $validGrades[array_rand($validGrades)];
+            $waga = rand(1, 5);
+            $komentarz = $gradeComments[array_rand($gradeComments)];
+            
+            $stmtGrade->execute([
+                ':id_ucznia' => $studentId,
+                ':id_przedmiotu' => $pId,
+                ':id_nauczyciela' => $tId,
+                ':data' => $date,
+                ':ocena' => $ocena,
+                ':waga' => $waga,
+                ':komentarz' => $komentarz
+            ]);
+        }
+    }
+
+    // 7. INSERT ATTENDANCE (Frekwencja)
+    echo "Inserting attendance (frekwencja)...\n<br>";
+    $stmtAttendance = $pdo->prepare("INSERT INTO Frekwencja (id_ucznia, id_przedmiotu, data, typ) VALUES (:id_ucznia, :id_przedmiotu, :data, :typ)");
+    
+    // Higher ratio of "Obecny" to simulate realistic school attendance
+    $attendanceTypes = ['Obecny', 'Obecny', 'Obecny', 'Obecny', 'Obecny', 'Obecny', 'Nieobecny', 'Spóźniony', 'Usprawiedliwiony', 'Zwolniony'];
+
+    foreach ($studentIds as $studentId) {
+        for ($a = 0; $a < $attendancePerStudent; $a++) {
+            $pId = $subjectIds[array_rand($subjectIds)];
+            
+            $timestamp = rand(strtotime('-4 months'), time());
+            $dayOfWeek = date('N', $timestamp);
+            
+            // Push weekend dates to Friday
+            if ($dayOfWeek == 6) $timestamp -= 86400; // Saturday to Friday
+            if ($dayOfWeek == 7) $timestamp -= 172800; // Sunday to Friday
+            
+            $hour = rand(8, 15);
+            $minute = rand(0, 59);
+            $date = date("Y-m-d $hour:$minute:00", $timestamp);
+            
+            $type = $attendanceTypes[array_rand($attendanceTypes)];
+            
+            $stmtAttendance->execute([
+                ':id_ucznia' => $studentId,
+                ':id_przedmiotu' => $pId,
+                ':data' => $date,
+                ':typ' => $type
+            ]);
+        }
+    }
+
+    // 8. INSERT EVENTS CALENDAR (Terminarz)
+    echo "Inserting schedule events (terminarz)...\n<br>";
+    $stmtEvent = $pdo->prepare("INSERT INTO terminarz (id_klasy, id_nauczyciela, id_przedmiotu, typ_wydarzenia, opis, zakres_start, zakres_end, data_dodania) VALUES (:id_klasy, :id_nauczyciela, :id_przedmiotu, :typ_wydarzenia, :opis, :zakres_start, :zakres_end, :data_dodania)");
+    
+    $eventTypes = ['Sprawdzian', 'Kartkówka', 'Nieobecność', 'Zastępstwo', 'Informacja', 'Inne', 'Wywiadówka'];
+    $eventDescriptions = [
+        'Sprawdzian' => 'Sprawdzian semestralny z działu drugiego.',
+        'Kartkówka' => 'Krótki sprawdzian z trzech ostatnich lekcji.',
+        'Nieobecność' => 'Nauczyciel nieobecny z przyczyn zdrowotnych.',
+        'Zastępstwo' => 'Zastępstwo w sali gimnastycznej.',
+        'Informacja' => 'Przynieść zgody na wycieczkę szkolną.',
+        'Inne' => 'Apel z okazji rocznicy narodowej.',
+        'Wywiadówka' => 'Spotkanie z rodzicami o godzinie 17:30.'
+    ];
+
+    foreach ($classIds as $classId) {
+        for ($e = 0; $e < $eventsPerClass; $e++) {
+            $tId = array_rand($teacherToSubjectMap);
+            $pId = $teacherToSubjectMap[$tId];
+            $type = $eventTypes[array_rand($eventTypes)];
+            
+            $startTs = rand(strtotime('now'), strtotime('+2 months'));
+            $startDate = date('Y-m-d H:i:s', $startTs);
+            $endDate = date('Y-m-d H:i:s', $startTs + (45 * 60)); // +45 minutes
+            $dateAdded = date('Y-m-d H:i:s', $startTs - (7 * 86400)); // Added 7 days prior
+            
+            $stmtEvent->execute([
+                ':id_klasy' => $classId,
+                ':id_nauczyciela' => $tId,
+                ':id_przedmiotu' => $pId,
+                ':typ_wydarzenia' => $type,
+                ':opis' => $eventDescriptions[$type],
+                ':zakres_start' => $startDate,
+                ':zakres_end' => $endDate,
+                ':data_dodania' => $dateAdded
+            ]);
+        }
+    }
+
+    // 9. INSERT REMARKS (Uwagi)
+    echo "Inserting remarks (uwagi)...\n<br>";
+    $stmtRemark = $pdo->prepare("INSERT INTO Uwagi (id_ucznia, id_nauczyciela, typ, opis, data) VALUES (:id_ucznia, :id_nauczyciela, :typ, :opis, :data)");
+    
+    for ($r = 0; $r < $remarksCount; $r++) {
+        $studentId = $studentIds[array_rand($studentIds)];
+        $tId = array_rand($teacherToSubjectMap);
+        $type = rand(0, 1) === 0 ? 'Pozytywna' : 'Negatywna';
+        $desc = ($type === 'Pozytywna') ? $remarkTextsPositive[array_rand($remarkTextsPositive)] : $remarkTextsNegative[array_rand($remarkTextsNegative)];
+        
+        $date = date('Y-m-d H:i:s', rand(strtotime('-3 months'), time()));
+        
+        $stmtRemark->execute([
+            ':id_ucznia' => $studentId,
+            ':id_nauczyciela' => $tId,
+            ':typ' => $type,
+            ':opis' => $desc,
+            ':data' => $date
+        ]);
+    }
+
+    // Commit transaction
+    $pdo->commit();
+    echo "<h2>Database successfully seeded! ✅</h2>";
+
+} catch (PDOException $e) {
+    if (isset($pdo) && $pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
+    echo "<h2>An error occurred while seeding:</h2>";
+    echo "<p style='color:red'>" . $e->getMessage() . "</p>";
 }
-$pdo->commit();
-
-echo "\nSUCCESS! All dummy data, including the updated Plan Lekcji and Terminarz events, has been successfully generated.\n";
-?>

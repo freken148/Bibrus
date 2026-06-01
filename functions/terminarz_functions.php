@@ -22,7 +22,7 @@
         $date->modify('-1 days');
         $d = 1;
 
-        echo "<table border='1'>";
+        echo "<table class='tableGlobal tableTerminarz tableTerminarzCalendar' border='1'>";
         echo "<tr><th>Pn</th><th>Wt</th><th>Śr</th><th>Cz</th><th>Pt</th><th>So</th><th>N</th></tr>";
         
         while ($d-$firstDayMonth < $daysInMonth) { 
@@ -50,34 +50,34 @@
                 $result = $conn->query($sql . ';');
 
                 if ($firstDayMonth <= $d && $d-$firstDayMonth < $daysInMonth) {
-                    echo "<td>";
+                    echo "<td class='tdCalendarDay tdCalendarDayTerminarz'>";
                     echo $d-$firstDayMonth+1;
-                    
+
                     while ($row = $result->fetch_assoc()) {
                         // I should export all of this to separate files later and leave in div only specific class
                         $Wid = $row['id_wydarzenia'];
 
-                        echo "<br><div style='border: 1px solid black; cursor: pointer;' onclick='this.querySelector(\"input\").checked = true; f = this.closest(\"form\"); f.action=\"terminarzInfoAdd.php\"; f.submit(); f.action=\"terminarz.php\"'>";
+                        echo "<br><div class='divGlobal divTerminarz eventCard' style='border: 1px solid black; cursor: pointer;' onclick='this.querySelector(\"input\").checked = true; f = this.closest(\"form\"); f.action=\"terminarzInfoAdd.php\"; f.submit(); f.action=\"terminarz.php\"'>";
                         echo "<input type='radio' name='terminarzINFO' value='$Wid' hidden>";
                         // im fucking genius nahui 23:43 04.05.2026
-                        echo $row['typ_wydarzenia'] . "<br>" . $row['nazwa'] . "<br>" . $row['imie'] . " " . $row['nazwisko']; 
+                        echo $row['typ_wydarzenia'] . "<br>" . $row['nazwa'] . "<br>" . $row['imie'] . " " . $row['nazwisko'];
 
                         if ($row['check1'] == 0) {
-                            echo "<br>Godziny: " . $row['time_start'] . " do " . $row['time_end'];  
+                            echo "<br>Godziny: " . $row['time_start'] . " do " . $row['time_end'];
                         }
                         echo "</div>";
-                        echo "<label>";
+                        echo "<label class='labelGlobal labelTerminarz eventDeleteLabel terminarzXButton'>";
                         echo "X";
                         echo "<input onchange='this.form.submit()' type='radio' name='terminarzREMOVE' value='$Wid' hidden>";
                         echo "</label>";
-                    }  
+                    }
 
                     $dayofmonth = $d-$firstDayMonth;
-                    echo "<br><button name='terminarzADD' formaction='terminarzInfoAdd.php' onclick='this.querySelector(\"input\").checked = true'>+</button>"; 
-                    echo "<input type='radio' name='terminarzAdd' value='$dayofmonth' hidden>";        
-                    echo "</td>"; 
+                    echo "<br><button class='buttonGlobal buttonTerminarz addEventButton' name='terminarzADD' formaction='terminarzInfoAdd.php' onclick='this.querySelector(\"input\").checked = true'>+</button>";
+                    echo "<input type='radio' name='terminarzAdd' value='$dayofmonth' hidden>";
+                    echo "</td>";
                 } else {
-                    echo "<td></td>";
+                    echo "<td class='tdCalendarDay tdCalendarDayEmpty'></td>";
                 }
                 $d++;
             }
@@ -94,7 +94,7 @@
         
         for ($i = 0; $i < 12; $i++) {
             $selected = ($selected_object == $i+1) ? "selected" : "";
-            echo "<option value='" . $i+1 . "' $selected>" . $months[$i] . "</option>";
+            echo "<option class='optionGlobal optionTerminarz' value='" . $i+1 . "' $selected>" . $months[$i] . "</option>";
         }
     }
 
@@ -114,11 +114,11 @@
         $selected_object = $_SESSION['rokDefault'];
 
         $selected = ($selected_object == $start) ? "selected" : "";
-        echo "<option value='" . $start . "' $selected>" . $start . "</option>";
+        echo "<option class='optionGlobal optionTerminarz' value='" . $start . "' $selected>" . $start . "</option>";
         while($start != $end) {
             $start++;
             $selected = ($selected_object == $start) ? "selected" : "";
-            echo "<option value='" . $start . "'  $selected>" . $start . "</option>";
+            echo "<option class='optionGlobal optionTerminarz' value='" . $start . "'  $selected>" . $start . "</option>";
         }
     }
 

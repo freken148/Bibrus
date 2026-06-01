@@ -10,14 +10,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plan lekcji</title>
 </head>
-<body>
-    <form method="POST" action="plan_lekcji.php">
-        <select name="wybrana_klasa" onchange='this.form.submit()'>
+<body class="bodyGlobal bodyPlanLekcji">
+    <form class="formGlobal formPlanLekcji" method="POST" action="plan_lekcji.php">
+        <select class="selectGlobal selectPlanLekcji" name="wybrana_klasa" onchange='this.form.submit()'>
             <?php
                 SelectKlasy();
             ?>
         </select>
-        <button name="glowna">Do głównej</button> 
+        <button class="buttonGlobal buttonPlanLekcji glownaButton" name="glowna">Do głównej</button> 
         <?php
             Init();
             ShowPlan();
