@@ -1,4 +1,4 @@
-<?php 
+<?php
     require "core/idk.php";
     require "functions/plan_lekcji_functions.php";
     require "core/SelectUczenKlasa.php";
@@ -9,6 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plan lekcji</title>
+    <?php require "core/head.php"; ?>
 </head>
 <body class="bodyGlobal bodyPlanLekcji">
     <form class="formGlobal formPlanLekcji" method="POST" action="plan_lekcji.php">
@@ -17,7 +18,7 @@
                 SelectKlasy();
             ?>
         </select>
-        <button class="buttonGlobal buttonPlanLekcji glownaButton" name="glowna">Do głównej</button> 
+        <button class="buttonGlobal buttonPlanLekcji glownaButton" name="glowna">Do głównej</button>
         <?php
             Init();
             ShowPlan();

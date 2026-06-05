@@ -59,10 +59,12 @@ CREATE TABLE Frekwencja (
     id_obecnosci INT PRIMARY KEY AUTO_INCREMENT,
     id_ucznia INT,
     id_przedmiotu INT,
+    id_nauczyciela INT,
     data DATETIME(0),
     typ ENUM('Obecny', 'Usprawiedliwiony', 'Nieobecny', 'Zwolniony', 'Spóźniony') DEFAULT 'Obecny',
     FOREIGN KEY (id_ucznia) REFERENCES Uczniowie(id_ucznia),
-    FOREIGN KEY (id_przedmiotu) REFERENCES Przedmioty(id_przedmiotu)
+    FOREIGN KEY (id_przedmiotu) REFERENCES Przedmioty(id_przedmiotu),
+    FOREIGN KEY (id_nauczyciela) REFERENCES Nauczyciele(id_nauczyciela)
 );
 
 UPDATE nauczyciele SET Haslo = 'Sala332!';
@@ -137,3 +139,9 @@ CREATE TABLE Uwagi (
     FOREIGN KEY (id_ucznia) REFERENCES Uczniowie(id_ucznia),
     FOREIGN KEY (id_nauczyciela) REFERENCES Nauczyciele(id_nauczyciela)
 );
+
+SELECT ocenydictionary.ocena
+                    FROM oceny
+                    INNER JOIN ocenydictionary ON oceny.ocena = ocenydictionary.wartosc
+                    INNER JOIN przedmioty ON oceny.id_przedmiotu = przedmioty.id_przedmiotu
+                    WHERE id_ucznia = 1 AND przedmioty.id_przedmiotu = 1

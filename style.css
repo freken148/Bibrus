@@ -1,2 +1,1029 @@
+/* ============================================================
+   BIBRUS — minimalistic stylesheet
+   Goal: calm, readable, no decoration noise.
+   Class convention: <globalClass> <pageClass> [variant]
+   See CLASSES.md for the full inventory.
+   ============================================================ */
+
+
+/* -----------------------------------------------------------
+   Theme tokens (light mode)
+   ----------------------------------------------------------- */
+:root {
+    --bg:            #fafafa;
+    --surface:       #ffffff;
+    --surface-alt:   #f5f6f8;
+    --border:        #e5e7eb;
+    --border-strong: #d1d5db;
+    --text:          #1f2937;
+    --text-muted:    #6b7280;
+    --text-faint:    #9ca3af;
+
+    --primary:       #2563eb;
+    --primary-hover: #1d4ed8;
+    --success:       #16a34a;
+    --success-hover: #15803d;
+    --danger:        #dc2626;
+    --danger-hover:  #b91c1c;
+    --warning:       #d97706;
+
+    --radius:    6px;
+    --radius-sm: 4px;
+
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+
+    --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+                 Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+                 Consolas, monospace;
+
+    --leading: 1.55;
+    --tracking: -0.005em;
+}
+
+
+/* -----------------------------------------------------------
+   Reset
+   ----------------------------------------------------------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+
+img, svg { display: block; max-width: 100%; }
+
+
+/* -----------------------------------------------------------
+   Global classes (every page)
+   ----------------------------------------------------------- */
+
+.bodyGlobal {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: var(--leading);
+    letter-spacing: var(--tracking);
+    color: var(--text);
+    background: var(--bg);
+    min-height: 100vh;
+    padding: var(--space-6) var(--space-5);
+}
+
+.bodyGlobal h1 { font-size: 24px; font-weight: 600; margin: 0 0 var(--space-4); }
+.bodyGlobal h2 { font-size: 18px; font-weight: 600; margin: var(--space-6) 0 var(--space-3); }
+.bodyGlobal h3 { font-size: 15px; font-weight: 600; margin: var(--space-4) 0 var(--space-2); }
+.bodyGlobal p  { margin: 0 0 var(--space-3); }
+
+.bodyGlobal a { color: var(--primary); text-decoration: none; }
+.bodyGlobal a:hover { text-decoration: underline; }
+
+.bodyGlobal hr { border: none; border-top: 1px solid var(--border); margin: var(--space-5) 0; }
+
+.bodyGlobal br { line-height: 1.6; }
+
+
+/* form: clean card, generous spacing */
+.formGlobal {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--space-6) var(--space-6);
+}
+
+.formGlobal > * + * { margin-top: var(--space-4); }
+
+
+/* table: minimal lines, comfortable density */
+.tableGlobal {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    font-size: 14px;
+    margin: var(--space-3) 0;
+}
+
+.tableGlobal th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--border-strong);
+    background: var(--surface-alt);
+}
+
+.tableGlobal td {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+}
+
+.tableGlobal tr:last-child td { border-bottom: none; }
+
+.tableGlobal tr:hover td { background: var(--surface-alt); }
+
+
+/* button: single subtle variant, variants just recolor */
+.buttonGlobal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 120ms, border-color 120ms, color 120ms;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.buttonGlobal:hover { background: var(--surface-alt); border-color: var(--text-muted); }
+.buttonGlobal:active { background: var(--border); }
+.buttonGlobal:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.buttonGlobal:disabled { opacity: 0.5; cursor: not-allowed; }
+
+
+/* input: simple, with clear focus ring */
+.inputGlobal {
+    display: inline-block;
+    padding: 7px 10px;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    transition: border-color 120ms, box-shadow 120ms;
+    vertical-align: middle;
+    min-width: 0;
+}
+
+.inputGlobal:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.inputGlobal::placeholder { color: var(--text-faint); }
+.inputGlobal:disabled { background: var(--surface-alt); cursor: not-allowed; }
+
+.inputGlobal[type="checkbox"],
+.inputGlobal[type="radio"] {
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    margin: 0 6px 0 0;
+    cursor: pointer;
+    accent-color: var(--primary);
+}
+
+.inputGlobal[type="datetime-local"] {
+    min-width: 180px;
+}
+
+
+/* select: native style, but with the focus ring */
+.selectGlobal {
+    display: inline-block;
+    padding: 7px 30px 7px 10px;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    transition: border-color 120ms, box-shadow 120ms;
+    vertical-align: middle;
+    min-width: 120px;
+}
+
+.selectGlobal:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.selectGlobal:disabled { background: var(--surface-alt); cursor: not-allowed; }
+
+
+/* label: small, no box around it, just spacing */
+.labelGlobal {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 var(--space-3) 0 0;
+    padding: 0;
+    font-size: 14px;
+    color: var(--text);
+    cursor: pointer;
+    user-select: none;
+    font-weight: 500;
+}
+
+
+/* option: keep native, just inherit */
+.optionGlobal {
+    padding: 6px 10px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface);
+}
+
+
+/* div: no styling by default */
+.divGlobal { display: block; margin: var(--space-1) 0; }
+
+
+/* -----------------------------------------------------------
+   Variant classes
+   ----------------------------------------------------------- */
+
+/* dodajButton base style is set in the v5 section (wider, centered, success color) */
+
+.removeButton {
+    color: var(--danger);
+    border-color: var(--danger);
+    padding: 5px 10px;
+    font-size: 13px;
+}
+.removeButton:hover {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger-hover);
+}
+
+.submitButton {
+    color: var(--primary);
+    border-color: var(--primary);
+    font-weight: 600;
+    padding: 9px 20px;
+}
+.submitButton:hover {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary-hover);
+}
+
+.glownaButton {
+    background: transparent;
+    color: var(--text-muted);
+    border-color: var(--border);
+    font-size: 12px;
+    padding: 5px 10px;
+    margin-left: auto;
+}
+.glownaButton:hover { color: var(--primary); border-color: var(--primary); background: transparent; }
+
+.navButton {
+    display: block;
+    width: 100%;
+    max-width: 360px;
+    margin: var(--space-2) auto;
+    padding: var(--space-4) var(--space-5);
+    font-size: 15px;
+    font-weight: 500;
+    text-align: left;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+.navButton:hover { border-color: var(--primary); color: var(--primary); }
+.navButton::after {
+    content: "→";
+    float: right;
+    color: var(--text-faint);
+    transition: transform 120ms, color 120ms;
+}
+.navButton:hover::after { color: var(--primary); transform: translateX(3px); }
+
+.radioGlobal,
+.checkboxGlobal {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    accent-color: var(--primary);
+}
+
+.formLogin {
+    max-width: 360px;
+    margin: 10vh auto 0;
+    padding: var(--space-7) var(--space-6);
+    text-align: center;
+}
+.formLogin::before {
+    content: "Bibrus";
+    display: block;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: var(--space-5);
+    letter-spacing: -0.02em;
+}
+
+.inputLogin {
+    display: block;
+    width: 100%;
+    margin: var(--space-2) 0;
+    padding: 10px 12px;
+    font-size: 15px;
+}
+
+
+/* -----------------------------------------------------------
+   Table variants (just accent on the first column or border)
+   ----------------------------------------------------------- */
+
+.tableKlasa { background: var(--surface); }
+.tableKlasa td:first-child { font-weight: 600; }
+.tableKlasa th { background: var(--surface-alt); }
+
+.tableWyszukaj th { background: var(--surface-alt); }
+.tableUczen    th { background: var(--surface-alt); }
+.tableWedlugPrzedmiotow th { background: var(--surface-alt); }
+.tableWedlugPrzedmiotow td { text-align: center; }
+.tableWedlugPrzedmiotow td:first-child { text-align: left; font-weight: 500; }
+
+
+/* -----------------------------------------------------------
+   Per-page accents (just a 2px top border, nothing more)
+   ----------------------------------------------------------- */
+
+.bodyFrekwencja .formGlobal { border-top: 2px solid #0d9488; }
+.bodyOceny      .formGlobal { border-top: 2px solid #7c3aed; }
+.bodyUwagi      .formGlobal { border-top: 2px solid #ea580c; }
+.bodyPlanLekcji .formGlobal { border-top: 2px solid #2563eb; }
+.bodyTerminarz  .formGlobal { border-top: 2px solid #db2777; }
+.bodyLogowanie  .formGlobal { border-top: 2px solid var(--text); }
+.bodyGlowna     .formGlobal { border-top: none; background: transparent; border: none; box-shadow: none; padding: 0; }
+
+
+/* -----------------------------------------------------------
+   Toolbar (radios + selects + glowna button in frekOcenyUni)
+   ----------------------------------------------------------- */
+
+.formGlobal > .labelGlobal,
+.formGlobal > .selectGlobal {
+    margin-right: var(--space-2);
+}
+
+.formGlobal > .labelGlobal + .selectGlobal,
+.formGlobal > .selectGlobal + .selectGlobal,
+.formGlobal > .selectGlobal + .labelGlobal {
+    margin-left: var(--space-2);
+}
+
+.formGlobal .buttonGlobal.glownaButton {
+    margin-left: var(--space-4);
+}
+
+
+/* -----------------------------------------------------------
+   Calendar (terminarz) — full-size day cells
+   Only applies on the calendar page (terminarz.php);
+   the schedule page (plan_lekcji) has its own .trLesson / .trBreak rules above
+   ----------------------------------------------------------- */
+
+.bodyTerminarz .tableTerminarzCalendar {
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 1px;
+    background: var(--border);
+}
+
+.bodyTerminarz .tableTerminarzCalendar th {
+    text-align: center;
+    background: var(--surface-alt);
+    color: var(--text-muted);
+    padding: var(--space-2);
+    font-size: 12px;
+    text-transform: none;
+    letter-spacing: 0;
+    border-bottom: none;
+}
+
+.bodyTerminarz .tableTerminarzCalendar td {
+    background: var(--surface);
+    border: none;
+    padding: var(--space-2);
+    vertical-align: top;
+    height: 100px;
+    position: relative;
+}
+
+.bodyTerminarz .tableTerminarzCalendar tr:hover td { background: var(--surface); }
+
+.tdCalendarDay {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.tdCalendarDayTerminarz { /* day with events - subtle highlight */
+    background: var(--surface-alt);
+}
+
+.tdCalendarDayEmpty {
+    background: var(--bg);
+    color: transparent;
+}
+
+.divTerminarz.eventCard {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--primary);
+    border-radius: var(--radius-sm);
+    padding: 6px 8px;
+    margin: 4px 0;
+    font-size: 12px;
+    line-height: 1.4;
+    cursor: pointer;
+    color: var(--text);
+}
+.divTerminarz.eventCard:hover { border-color: var(--primary); }
+
+.eventDeleteLabel { display: inline-block; }
+
+.terminarzXButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    margin-left: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    border-radius: 50%;
+    cursor: pointer;
+    line-height: 1;
+}
+.terminarzXButton:hover {
+    color: #fff;
+    background: var(--danger);
+    border-color: var(--danger);
+}
+.terminarzXButton input[type="radio"] { display: none; }
+
+.addEventButton {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px solid var(--border-strong);
+}
+.addEventButton:hover {
+    color: #fff;
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+
+/* -----------------------------------------------------------
+   Terminarz details / add form
+   ----------------------------------------------------------- */
+
+.tableTerminarzDetails {
+    max-width: 640px;
+    margin: var(--space-4) auto;
+}
+
+.tableTerminarzDetails th {
+    text-align: center;
+    background: var(--surface-alt);
+    color: var(--text);
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.tableTerminarzDetails td {
+    padding: var(--space-3) var(--space-4);
+}
+.tableTerminarzDetails td:first-child {
+    font-weight: 600;
+    width: 30%;
+    color: var(--text-muted);
+    background: transparent;
+}
+
+.formTerminarzAdd {
+    max-width: 640px;
+    margin: var(--space-4) auto;
+    background: var(--surface);
+}
+
+.inputTerminarzAdd,
+.selectTerminarzAdd {
+    width: 100%;
+    margin: 2px 0;
+}
+
+
+/* -----------------------------------------------------------
+   Plan lekcji (schedule grid)
+   - Lesson rows: tall, bordered, structured
+   - Break rows: short, borderless, blend with adjacent lesson
+   ----------------------------------------------------------- */
+
+.tableTerminarzCalendar {
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+}
+
+.tableTerminarzCalendar thead th {
+    text-align: center;
+    background: var(--surface-alt);
+    color: var(--text-muted);
+    padding: var(--space-3) var(--space-2);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    border-bottom: 1px solid var(--border-strong);
+}
+
+/* first two columns (nr lekcji, godziny) are narrower */
+.tableTerminarzCalendar thead th.thLesson:first-child,
+.tableTerminarzCalendar thead th.thLesson:nth-child(2) {
+    width: 90px;
+    background: var(--surface);
+    color: var(--text-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-strong);
+}
+
+/* lesson rows */
+.trLesson td {
+    padding: var(--space-3) var(--space-3);
+    vertical-align: top;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    height: 64px;
+    font-size: 13px;
+}
+
+.trLesson:last-child td { border-bottom: 1px solid var(--border-strong); }
+
+/* nr lekcji + godziny columns (left 2) get subtle alt background */
+.trLesson .tdLessonNum,
+.trLesson .tdLessonTime {
+    background: var(--surface-alt);
+    color: var(--text-muted);
+    font-size: 12px;
+    text-align: center;
+    font-weight: 500;
+    border-right: 1px solid var(--border);
+    width: 90px;
+    line-height: 1.4;
+}
+
+.trLesson .tdLessonTime {
+    color: var(--text);
+    font-weight: 500;
+}
+
+/* a lesson cell: 3 lines of info */
+.trLesson .tdLessonCell {
+    padding: 6px 10px;
+    line-height: 1.35;
+}
+
+.trLesson .tdLessonCell .lessonSubject {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+
+.trLesson .tdLessonCell .lessonTeacher {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+}
+
+.trLesson .tdLessonCell .lessonRoom {
+    font-size: 11px;
+    color: var(--text-faint);
+}
+
+.trLesson .tdLessonEmpty {
+    background: var(--surface);
+    color: transparent;
+}
+
+/* break rows: smaller, no border, blend with surrounding */
+.trBreak td {
+    padding: 2px var(--space-2);
+    background: var(--bg);
+    border: none;
+    color: var(--text-faint);
+    font-size: 11px;
+    height: 18px;
+    line-height: 1;
+}
+
+.trBreak .tdBreakNum {
+    background: var(--bg);
+}
+
+.trBreak .tdBreakTime {
+    background: var(--bg);
+    color: var(--text-faint);
+    font-size: 11px;
+    text-align: center;
+    font-style: italic;
+    border-right: 1px solid var(--border);
+    width: 90px;
+    line-height: 18px;
+}
+
+.trBreak .tdBreakCell {
+    background: var(--bg);
+}
+
+/* merge break row with adjacent lesson row visually */
+.trBreak td { border-top: none !important; border-bottom: none !important; }
+.trBreak + .trLesson td { border-top: none !important; }
+.trLesson + .trBreak td { border-bottom: none !important; }
+.tableTerminarzCalendar tr.trBreak:hover td { background: var(--bg); }
+.tableTerminarzCalendar tr.trLesson:hover td { background: var(--surface-alt); }
+.tableTerminarzCalendar tr.trLesson:hover .tdLessonEmpty { background: var(--surface-alt); }
+.tableTerminarzCalendar tr.trLesson:hover .tdLessonNum,
+.tableTerminarzCalendar tr.trLesson:hover .tdLessonTime { color: var(--text); }
+
+/* in plan_lekcji page, the 2 left columns should be just slightly
+   accented — not as strong as terminarz */
+.bodyPlanLekcji .tableTerminarzCalendar thead th { background: var(--surface-alt); }
+.bodyPlanLekcji .tableTerminarzCalendar .trLesson td { height: 60px; }
+
+
+/* -----------------------------------------------------------
+   Login page
+   ----------------------------------------------------------- */
+
+.bodyLogowanie {
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.bodyLogowanie > form,
+.bodyLogowanie > .formLogowanie {
+    margin: 0 auto;
+}
+
+.bodyLogowanie .buttonGlobal.submitButton {
+    width: 100%;
+    margin-top: var(--space-4);
+    padding: 10px 16px;
+}
+
+
+/* -----------------------------------------------------------
+   Glowna (main menu) — title above the cards
+   ----------------------------------------------------------- */
+
+.bodyGlowna {
+    background: var(--bg);
+    min-height: 100vh;
+}
+
+.bodyGlowna::before {
+    content: "Bibrus";
+    display: block;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: var(--space-2);
+    letter-spacing: -0.02em;
+}
+
+.bodyGlowna::after {
+    content: "System e-dziennika";
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: var(--space-6);
+}
+
+
+/* -----------------------------------------------------------
+   Hide "Według przedmiotów" on uwagi (your existing rule)
+   ----------------------------------------------------------- */
+
 .formUwagi .checkboxGlobal { display: none; }
 .formUwagi label.labelFrekwencja:has(.checkboxGlobal) { display: none; }
+
+
+/* -----------------------------------------------------------
+   v5 — toolbar, glowna sections, grade colors, centered
+   ----------------------------------------------------------- */
+
+/* Toolbar used in frekOcenyUni.php (radios + selects + glowna button) */
+.toolbarFrekwencja {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    margin: 0 0 var(--space-4);
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+.toolbarFrekwencja .glownaButton { margin-left: auto; }
+
+/* Toolbar in terminarz (3 selects + glowna button) */
+.toolbarTerminarz {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    margin: 0 0 var(--space-4);
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+.toolbarTerminarz .glownaButton { margin-left: auto; }
+
+/* Glowna (main menu) sections */
+.bodyGlowna {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: var(--bg);
+    min-height: 100vh;
+    padding: var(--space-7) var(--space-5);
+}
+.glownaHeader h1 {
+    font-size: 24px;
+    font-weight: 500;
+    margin: 0 0 var(--space-2);
+    color: var(--text);
+}
+.glownaHeader p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin: 0 0 var(--space-6);
+}
+.glownaNav {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 0 var(--space-6);
+}
+.glownaNav .navButton { margin: var(--space-2) 0; }
+.glownaFooter { width: 100%; max-width: 400px; }
+.formGlownaLogout {
+    display: flex;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+/* Centered text in all selects (and their options) */
+.selectGlobal,
+.selectGlobal option,
+.optionGlobal {
+    text-align: center;
+    text-align-last: center;
+}
+select { text-align: center; }
+
+/* Centered content in every table (both axes) */
+.tableGlobal th,
+.tableGlobal td {
+    text-align: center;
+    vertical-align: middle;
+}
+/* left-align student names (first col) in per-student tables */
+.tableWyszukaj td:first-child:not(:has(input)),
+.tableUczen td:first-child,
+.tableKlasa td:first-child {
+    text-align: left;
+}
+/* klasa table: keep first col left-aligned */
+.tableKlasa td { vertical-align: middle; }
+
+/* Dodaj button — wider, centered, more prominent */
+.dodajButton {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    margin: var(--space-4) auto;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* Back button (used in terminarzInfoAdd) */
+.backButton {
+    display: inline-block;
+    margin-bottom: var(--space-4);
+    text-decoration: none;
+}
+
+/* Grade badge — colored pill (1=red, 2=orange, 3=yellow, 4=green, 5=blue, 6=purple) */
+.gradeBadge {
+    display: inline-block;
+    min-width: 22px;
+    padding: 2px 6px;
+    margin: 1px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+}
+.gradeBadge.grade1 { background: #dc2626; }
+.gradeBadge.grade2 { background: #f97316; }
+.gradeBadge.grade3 { background: #eab308; color: #422006; }
+.gradeBadge.grade4 { background: #16a34a; }
+.gradeBadge.grade5 { background: #2563eb; }
+.gradeBadge.grade6 { background: #7c3aed; }
+
+.ocenyBadgesCell {
+    text-align: left !important;
+    line-height: 2;
+}
+
+/* Uwaga badge */
+.uwagaBadge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+}
+.uwagaBadgePozytywna { background: var(--success); }
+.uwagaBadgeNegatywna { background: var(--danger); }
+
+/* Terminarz event card (now with proper sub-classes) */
+.eventCardWrapper {
+    position: relative;
+    padding: 4px;
+    margin: 4px 0;
+}
+.eventCard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--primary);
+    border-radius: var(--radius-sm);
+    padding: 6px 8px;
+    font-size: 12px;
+    line-height: 1.4;
+    cursor: pointer;
+    color: var(--text);
+    margin-top: 4px;
+}
+.eventCard:hover { border-color: var(--primary); background: var(--surface-alt); }
+.eventCard .eventType { font-weight: 600; color: var(--primary); }
+.eventCard .eventSubject { color: var(--text); }
+.eventCard .eventTeacher { color: var(--text-muted); font-size: 11px; }
+.eventCard .eventTime { color: var(--text-faint); font-size: 11px; font-style: italic; }
+
+.dayNumber {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+/* X button positioned at top-right of event card */
+.eventDeleteLabel.terminarzXButton {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    border-radius: 50%;
+    cursor: pointer;
+    text-align: center;
+    line-height: 16px;
+    padding: 0;
+    z-index: 2;
+    margin: 0;
+}
+.eventDeleteLabel.terminarzXButton:hover {
+    color: #fff;
+    background: var(--danger);
+    border-color: var(--danger);
+}
+.eventDeleteLabel.terminarzXButton input[type="radio"] { display: none; }
+
+/* + add button (in each day cell) */
+.addEventButton {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    line-height: 22px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    text-align: center;
+    text-decoration: none;
+    margin-top: 4px;
+}
+.addEventButton:hover {
+    color: #fff;
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+/* Terminarz details / add form input widths */
+.inputTerminarzAdd, .selectTerminarzAdd { width: 100%; }
+.formTerminarzAdd { max-width: 640px; margin: var(--space-4) auto; }
+
+/* Fix some old global rules that conflict with new centered layout */
+.formGlobal > * + * { margin-top: var(--space-3); }
+.bodyGlobal { padding: var(--space-5) var(--space-5); }
+
+
+/* -----------------------------------------------------------
+   Responsive
+   ----------------------------------------------------------- */
+
+@media (max-width: 900px) {
+    .bodyGlobal { padding: var(--space-4) var(--space-3); }
+    .formGlobal { padding: var(--space-4); }
+    .navButton { max-width: 100%; }
+}
+
+@media (max-width: 600px) {
+    .bodyGlobal { padding: var(--space-3) var(--space-2); font-size: 14px; }
+    .formGlobal { padding: var(--space-3); }
+    .tableGlobal { font-size: 13px; }
+    .tableGlobal th,
+    .tableGlobal td { padding: var(--space-2) var(--space-2); }
+}
+
+
+/* -----------------------------------------------------------
+   Print
+   ----------------------------------------------------------- */
+
+@media print {
+    .bodyGlobal { background: #fff; padding: 0; }
+    .formGlobal  { box-shadow: none; border: none; }
+    .buttonGlobal, .navButton, .glownaButton, .submitButton,
+    .dodajButton, .removeButton, .addEventButton, .terminarzXButton {
+        display: none !important;
+    }
+    .tableGlobal th { background: #eee !important; color: #000 !important; }
+}

@@ -4,13 +4,14 @@
     session_unset();
     session_destroy();
     session_start();
-?> 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logowanie</title>
+    <?php require "core/head.php"; ?>
 </head>
 <body class="bodyGlobal bodyLogowanie">
     <form class="formGlobal formLogowanie formLogin" method="POST" action="logowanie.php">
@@ -28,8 +29,8 @@ if (isset($_POST['imie']) && isset($_POST['nazwisko']) && isset($_POST['haslo'])
     $nazwisko = $_POST['nazwisko'];
     $haslo = $_POST['haslo'];
 
-    $sql = "SELECT id_nauczyciela, imie, nazwisko, haslo 
-            FROM nauczyciele 
+    $sql = "SELECT id_nauczyciela, imie, nazwisko, haslo
+            FROM nauczyciele
             WHERE imie = '$imie' AND nazwisko = '$nazwisko' AND haslo = '$haslo'";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {

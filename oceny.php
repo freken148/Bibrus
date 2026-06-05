@@ -1,4 +1,4 @@
-<?php 
+<?php
     require "core/idk.php";
     require "functions/oceny_functions.php";
 ?>
@@ -9,10 +9,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oceny</title>
+    <?php require "core/head.php"; ?>
 </head>
-<body class="bodyGlobal bodyOceny">   
-    <form class="formGlobal formOceny" method="POST" action="oceny.php">
-        <?php 
+<body class="bodyGlobal bodyOceny">
+    <form id="forma1" class="formGlobal formOceny" method="POST" action="oceny.php">
+        <?php
             require "core/frekOcenyUni.php";
 
             if (isset($_POST['dodajPrzycisk'])) {
@@ -26,11 +27,11 @@
             if (isset($_POST['KlasaUczen'])) {
                 Init();
 
-                if ($_POST['KlasaUczen'] == 'klasa') { 
+                if ($_POST['KlasaUczen'] == 'klasa') {
                     GeneralKlasaInfo();
-                } 
+                }
 
-                if (isset($_POST['WedlugPrzedmiotow'])) {          
+                if (isset($_POST['WedlugPrzedmiotow'])) {
                     if ($_POST['KlasaUczen'] == 'klasa') {
                         WedlugPrzedmiotow_Klasa();
                     }
@@ -42,9 +43,7 @@
                 } else {
                     Wyszukaj();
 
-                    if ($_POST['KlasaUczen'] == 'klasa') {
-                        echo "<button class='buttonGlobal buttonOceny dodajButton' name='dodajPrzycisk'>dodaj</button>";
-                    }
+                    echo "<button class='buttonGlobal buttonOceny dodajButton' name='dodajPrzycisk'>dodaj</button>";
 
                     if ($_POST['KlasaUczen'] == 'uczen') {
                         UczenOceny();

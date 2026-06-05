@@ -3,17 +3,17 @@
         global $conn;
         $fetchKlasa = $_POST['wybrana_klasa'] ?? '';
         $klasa = "klasy.id_klasy = $fetchKlasa";
-        
-        $sql = "SELECT 
-                    nauczyciele.imie, 
-                    nauczyciele.nazwisko, 
-                    klasy.nazwa, 
-                    COUNT(DISTINCT uczniowie.id_ucznia) AS ilosc_uczniow, 
+
+        $sql = "SELECT
+                    nauczyciele.imie,
+                    nauczyciele.nazwisko,
+                    klasy.nazwa,
+                    COUNT(DISTINCT uczniowie.id_ucznia) AS ilosc_uczniow,
                     SUM(uwagi.typ = 'Pozytywna') AS ilosc_pozytywnych,
                     SUM(uwagi.typ = 'Negatywna') AS ilosc_negatywnych
-                FROM klasy 
-                INNER JOIN nauczyciele ON klasy.id_wychowawcy = nauczyciele.id_nauczyciela 
-                INNER JOIN uczniowie ON klasy.id_klasy = uczniowie.id_klasy 
+                FROM klasy
+                INNER JOIN nauczyciele ON klasy.id_wychowawcy = nauczyciele.id_nauczyciela
+                INNER JOIN uczniowie ON klasy.id_klasy = uczniowie.id_klasy
                 LEFT JOIN uwagi ON uczniowie.id_ucznia = uwagi.id_ucznia
                 WHERE $klasa";
 
@@ -22,8 +22,8 @@
 
         $result = $conn->query($sql . ';');
         while($row = $result->fetch_assoc()) {
-            echo '<tr><td>' . $row['imie'] . ' ' . $row['nazwisko'] . '</td>';
-            echo '<td>' . $row['nazwa'] . '</td><td>' . $row['ilosc_uczniow'] . '</td>';
+            echo '<tr><td>' . htmlspecialchars($row['imie'] . ' ' . $row['nazwisko']) . '</td>';
+            echo '<td>' . htmlspecialchars($row['nazwa']) . '</td><td>' . $row['ilosc_uczniow'] . '</td>';
             echo '<td>' . ($row['ilosc_pozytywnych'] ?? 0) . '</td>';
             echo '<td>' . ($row['ilosc_negatywnych'] ?? 0) . '</td></tr>';
         }
@@ -33,16 +33,16 @@
     function Wyszukaj() {
         global $conn, $warunek;
 
-        $sql = "SELECT 
-                    uczniowie.id_ucznia, 
-                    klasy.nazwa, 
-                    imie, 
-                    nazwisko, 
+        $sql = "SELECT
+                    uczniowie.id_ucznia,
+                    klasy.nazwa,
+                    imie,
+                    nazwisko,
                     SUM(uwagi.typ = 'Pozytywna') AS ilosc_pozytywnych,
                     SUM(uwagi.typ = 'Negatywna') AS ilosc_negatywnych
-                FROM uczniowie 
-                INNER JOIN klasy ON uczniowie.id_klasy = klasy.id_klasy 
-                LEFT JOIN uwagi ON uczniowie.id_ucznia = uwagi.id_ucznia 
+                FROM uczniowie
+                INNER JOIN klasy ON uczniowie.id_klasy = klasy.id_klasy
+                LEFT JOIN uwagi ON uczniowie.id_ucznia = uwagi.id_ucznia
                 WHERE $warunek
                 GROUP BY uczniowie.id_ucznia";
 
@@ -51,7 +51,7 @@
         if ($_POST['KlasaUczen'] == 'klasa') {
             echo "<th>Nr.</th>";
         }
-        echo "<th>Uczen</th><th>Klasa</th><th>Pozytywne</th><th>Negatywne</th><th>Typ</th><th>Opis</th></tr>";
+        echo "<th>Uczeń</th><th>Klasa</th><th>Pozytywne</th><th>Negatywne</th><th>Typ</th><th>Opis</th></tr>";
         $result = $conn->query($sql . ';');
 
         $numerWDzienniku = 0;
@@ -61,38 +61,36 @@
                 $uczenID = $row['id_ucznia'];
 
                 echo "<tr>";
-                    if ($_POST['KlasaUczen'] == 'klasa') { 
-                        echo "<td>" . $numerWDzienniku . "</td>";
-                    }  
-                    echo "<td>" . $row["imie"];
-                    echo " " . $row["nazwisko"] . "</td>";
-                    echo "<td>" . $row['nazwa'] . "</td>";
-                    echo "<td>" . ($row["ilosc_pozytywnych"] ?? 0) . "</td>";
-                    echo "<td>" . ($row["ilosc_negatywnych"] ?? 0) . "</td>";
-                    echo "<td><select class='selectGlobal selectUwagi' name='uwaga_typ[$uczenID]'>";
-                    uwagaTypSelect();
-                    echo "</select></td>";
-                    echo "<td><input class='inputGlobal inputUwagi' maxlength='1000' placeholder='opis' name='uwaga_opis[$uczenID]'></td>";
+                if ($_POST['KlasaUczen'] == 'klasa') {
+                    echo "<td>" . $numerWDzienniku . "</td>";
+                }
+                echo "<td>" . htmlspecialchars($row['imie'] . ' ' . $row['nazwisko']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['nazwa']) . "</td>";
+                echo "<td>" . ($row['ilosc_pozytywnych'] ?? 0) . "</td>";
+                echo "<td>" . ($row['ilosc_negatywnych'] ?? 0) . "</td>";
+                echo "<td><select class='selectGlobal selectUwagi' name='uwaga_typ[$uczenID]'>";
+                uwagaTypSelect();
+                echo "</select></td>";
+                echo "<td><input class='inputGlobal inputUwagi' maxlength='1000' placeholder='opis' name='uwaga_opis[$uczenID]'></td>";
                 echo "</tr>";
             }
         } else {
             $sql = "SELECT uczniowie.id_ucznia, uczniowie.imie, uczniowie.nazwisko, klasy.nazwa
-                    FROM uczniowie 
-                    INNER JOIN klasy ON uczniowie.id_klasy = klasy.id_klasy 
-                    WHERE $warunek 
-                    GROUP BY uczniowie.id_ucznia 
+                    FROM uczniowie
+                    INNER JOIN klasy ON uczniowie.id_klasy = klasy.id_klasy
+                    WHERE $warunek
+                    GROUP BY uczniowie.id_ucznia
                     ORDER BY nazwa";
 
             $result = $conn->query($sql . ';');
             while($row = $result->fetch_assoc()) {
                 echo "<tr>";
-                    if ($_POST['KlasaUczen'] == 'klasa') { 
-                        echo "<td>" . $numerWDzienniku . "</td>";
-                    }  
-                    echo "<td>" . $row["imie"] . "</td>";
-                    echo "<td>" . $row["nazwisko"] . "</td>";
-                    echo "<td>" . $row["nazwa"] . "</td>";
-                    echo "<td>Brak uwag</td>";
+                if ($_POST['KlasaUczen'] == 'klasa') {
+                    echo "<td>" . $numerWDzienniku . "</td>";
+                }
+                echo "<td>" . htmlspecialchars($row['imie'] . ' ' . $row['nazwisko']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['nazwa']) . "</td>";
+                echo "<td>Brak uwag</td>";
                 echo "</tr>";
             }
         }
@@ -101,12 +99,13 @@
 
     function UczenUwagi() {
         global $conn, $fetchKlasa, $fetchUczen;
+        $id_nauczyciela = $_SESSION['id_nauczyciela'];
         $fetchKlasa = $_POST['wybrana_klasa'] ?? 0;
         $fetchUczen = $_POST['wybrany_uczen'] ?? 0;
         BugFixWhenClickUczenAndSelectKlasa();
 
         echo "<table class='tableGlobal tableUwagi tableUczen' border='1'>";
-        echo "<tr><th>Data i czas</th><th>Typ</th><th>Opis</th><th>Nauczyciel</th></tr>";
+        echo "<tr><th>Data i czas</th><th>Typ</th><th>Opis</th><th>Nauczyciel</th><th></th></tr>";
 
         $sql = "SELECT uwagi.id_uwagi, uwagi.id_nauczyciela, uwagi.id_ucznia, uwagi.typ, uwagi.opis, uwagi.data, nauczyciele.imie, nauczyciele.nazwisko
                 FROM uwagi
@@ -118,29 +117,32 @@
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
-                echo "<td>" . $row["data"] . "</td>";
-                echo "<td>" . $row["typ"] . "</td>";
-                echo "<td>" . $row["opis"] . "</td>";
-                echo "<td>" . $row["imie"] . " " . $row["nazwisko"] . "</td>";
+                echo "<td>" . $row['data'] . "</td>";
+                $typClass = ($row['typ'] === 'Pozytywna') ? 'uwagaBadgePozytywna' : 'uwagaBadgeNegatywna';
+                echo "<td><span class='uwagaBadge $typClass'>" . $row['typ'] . "</span></td>";
+                echo "<td>" . htmlspecialchars($row['opis']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['imie'] . ' ' . $row['nazwisko']) . "</td>";
 
-                if ($row['id_nauczyciela'] == $_SESSION['id_nauczyciela']) {
-                    echo "<td><button class='buttonGlobal buttonUwagi removeButton' value = '" . $row['id_uwagi'] . "' name='usun'>Usuń</button></td>";
+                if ($row['id_nauczyciela'] == $id_nauczyciela) {
+                    echo "<td><button class='buttonGlobal buttonUwagi removeButton' value='" . $row['id_uwagi'] . "' name='usun'>Usuń</button></td>";
+                } else {
+                    echo "<td></td>";
                 }
                 echo "</tr>";
             }
         } else {
-            echo "<td colspan='4'>Brak uwag wpisanych</td>";
+            echo "<td colspan='5'>Brak uwag wpisanych</td>";
         }
         echo "</table>";
     }
 
     function WedlugPrzedmiotow_Klasa() {
         global $conn, $fetchKlasa;
-        
+
         $fetchKlasa = $_POST['wybrana_klasa'] ?? 0;
         BugFixWhenClickUczenAndSelectKlasa();
 
-        $sql = "SELECT 
+        $sql = "SELECT
                     nauczyciele.imie,
                     nauczyciele.nazwisko,
                     SUM(uwagi.typ = 'Pozytywna') AS ilosc_pozytywnych,
@@ -156,7 +158,7 @@
         echo "<table class='tableGlobal tableUwagi tableWedlugPrzedmiotow' border='1'><tr><th>Nauczyciel</th><th>Uwagi pozytywne</th><th>Uwagi negatywne</th></tr>";
         $result = $conn->query($sql . ';');
         while($row = $result->fetch_assoc()) {
-            echo "<tr><td>" . $row['imie'] . ' ' . $row['nazwisko'] . "</td>";
+            echo "<tr><td>" . htmlspecialchars($row['imie'] . ' ' . $row['nazwisko']) . "</td>";
             echo "<td>" . ($row['ilosc_pozytywnych'] ?? 0) . "</td>";
             echo "<td>" . ($row['ilosc_negatywnych'] ?? 0) . "</td></tr>";
         }
@@ -164,11 +166,11 @@
 
     function WedlugPrzedmiotow_Uczen() {
         global $conn, $fetchUczen;
-        
+
         $fetchUczen = $_POST['wybrany_uczen'] ?? 0;
         BugFixWhenClickUczenAndSelectKlasa();
 
-        $sql = "SELECT 
+        $sql = "SELECT
                     nauczyciele.imie,
                     nauczyciele.nazwisko,
                     SUM(uwagi.typ = 'Pozytywna') AS ilosc_pozytywnych,
@@ -181,7 +183,7 @@
         echo "<table class='tableGlobal tableUwagi tableWedlugPrzedmiotow' border='1'><tr><th>Nauczyciel</th><th>Uwagi pozytywne</th><th>Uwagi negatywne</th></tr>";
         $result = $conn->query($sql . ';');
         while($row = $result->fetch_assoc()) {
-            echo "<tr><td>" . $row['imie'] . ' ' . $row['nazwisko'] . "</td>";
+            echo "<tr><td>" . htmlspecialchars($row['imie'] . ' ' . $row['nazwisko']) . "</td>";
             echo "<td>" . ($row['ilosc_pozytywnych'] ?? 0) . "</td>";
             echo "<td>" . ($row['ilosc_negatywnych'] ?? 0) . "</td></tr>";
         }
@@ -201,9 +203,9 @@
 
             if ($typ != '-1') {
                 $opisEscaped = $conn->real_escape_string($opis);
-                $sql = "INSERT INTO uwagi (id_ucznia, id_nauczyciela, typ, opis, data) 
+                $sql = "INSERT INTO uwagi (id_ucznia, id_nauczyciela, typ, opis, data)
                         VALUES ($id_ucznia, $id_nauczyciela, '$typ', '$opisEscaped', NOW())";
-                $ok = $conn->query($sql);
+                $conn->query($sql);
             }
         }
     }
@@ -212,7 +214,6 @@
         global $conn;
         $id_uwagi = intval($_POST['usun']);
         $id_nauczyciela = $_SESSION['id_nauczyciela'];
-
         $sql = "DELETE FROM uwagi WHERE id_uwagi = $id_uwagi AND id_nauczyciela = $id_nauczyciela";
         $conn->query($sql . ';');
     }
