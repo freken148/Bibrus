@@ -3,6 +3,21 @@
     require "functions/terminarz_functions.php";
     require "core/SelectUczenKlasa.php";
 
+    // Mirror POST -> session on every load so the form selects stay
+    // selected after coming back from terminarzInfoAdd.php.
+    if (isset($_POST['wybrana_klasa'])) {
+        $_SESSION['klasaDefault'] = intval($_POST['wybrana_klasa']);
+        $_SESSION['terminarz_klasa'] = intval($_POST['wybrana_klasa']);
+    }
+    if (isset($_POST['wybrany_miesiac'])) {
+        $_SESSION['miesiacDefault'] = intval($_POST['wybrany_miesiac']);
+        $_SESSION['terminarz_miesiac'] = intval($_POST['wybrany_miesiac']);
+    }
+    if (isset($_POST['wybrany_rok'])) {
+        $_SESSION['rokDefault'] = $_POST['wybrany_rok'];
+        $_SESSION['terminarz_rok'] = $_POST['wybrany_rok'];
+    }
+
     if (isset($_POST['TerAdd'])) {
         terminarzDodaj();
         header('Location: terminarz.php');

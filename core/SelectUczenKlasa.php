@@ -35,7 +35,14 @@
     function SelectKlasy() {
         global $conn;
 
-        $_SESSION['klasaDefault'] = $_POST['wybrana_klasa'] ?? 1;
+        // Prefer POST, then session-saved value from terminarz, then default
+        if (isset($_POST['wybrana_klasa'])) {
+            $_SESSION['klasaDefault'] = intval($_POST['wybrana_klasa']);
+        } else if (isset($_SESSION['terminarz_klasa']) && !isset($_SESSION['klasaDefault'])) {
+            $_SESSION['klasaDefault'] = intval($_SESSION['terminarz_klasa']);
+        } else if (!isset($_SESSION['klasaDefault'])) {
+            $_SESSION['klasaDefault'] = 1;
+        }
         $selected_object = $_SESSION['klasaDefault'];
 
         $sql = "SELECT id_klasy, nazwa FROM klasy ORDER BY nazwa ASC";

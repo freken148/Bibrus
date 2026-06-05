@@ -11,49 +11,69 @@
     function ShowTerminarz() {
         global $conn, $fetchKlasa;
 
-        $year = $_POST['wybrany_rok'] ?? 1;
-        $month = $_POST['wybrany_miesiac'] ?? 1;
-        $klasa = $_POST['wybrana_klasa'] ?? 1;
+        // Persist selected values to session
+        if (isset($_POST['wybrany_rok'])) {
+            $_SESSION['terminarz_rok'] = $_POST['wybrany_rok'];
+        }
+        if (isset($_POST['wybrany_miesiac'])) {
+            $_SESSION['terminarz_miesiac'] = $_POST['wybrany_miesiac'];
+        }
+        if (isset($_POST['wybrana_klasa'])) {
+            $_SESSION['terminarz_klasa'] = $_POST['wybrana_klasa'];
+        }
+
+        $year = $_POST['wybrany_rok'] ?? ($_SESSION['terminarz_rok'] ?? date('Y'));
+        $month = $_POST['wybrany_miesiac'] ?? ($_SESSION['terminarz_miesiac'] ?? date('n'));
+        
+        // SECURITY FIX: Force $klasa to be an integer to prevent SQL Injection
+        $klasa = intval($_POST['wybrana_klasa'] ?? ($_SESSION['terminarz_klasa'] ?? 1));
 
         $date = new DateTime($year . '-' . $month . '-01');
-        $dateString = $date->format('Y-m-d');
         $daysInMonth = intval($date->format('t'));
         $firstDayMonth = intval($date->format('N'));
-        $date->modify('-1 days');
         $d = 1;
 
         echo "<table class='tableGlobal tableTerminarz tableTerminarzCalendar' border='1'>";
         echo "<tr><th>Pn</th><th>Wt</th><th>Śr</th><th>Cz</th><th>Pt</th><th>So</th><th>N</th></tr>";
 
-        while ($d-$firstDayMonth < $daysInMonth) {
+        while ($d - $firstDayMonth < $daysInMonth) {
             echo "<tr>";
             for ($j = 1; $j < 8; $j++) {
-                $date->modify('+1 days');
-                $dateString = $date->format('Y-m-d');
-                $sql = "SELECT
-                            id_wydarzenia,
-                            id_klasy,
-                            terminarz.id_nauczyciela,
-                            imie,
-                            nazwisko,
-                            nazwa,
-                            typ_wydarzenia,
-                            DATEDIFF(zakres_end, zakres_start) AS check1,
-                            DATE_FORMAT(zakres_start, '%H:%i') AS time_start,
-                            DATE_FORMAT(zakres_end, '%H:%i') AS time_end
-                        FROM terminarz
-                        INNER JOIN nauczyciele
-                        ON terminarz.id_nauczyciela = nauczyciele.id_nauczyciela
-                        INNER JOIN przedmioty
-                        ON terminarz.id_przedmiotu = przedmioty.id_przedmiotu
-                        WHERE id_klasy = $klasa
-                        AND DATEDIFF('$dateString', zakres_start) >= 0
-                        AND DATEDIFF(zakres_end, '$dateString') >= 0";
-                $result = $conn->query($sql . ';');
+                
+                // CHECK IF IT IS A VALID DAY OF THE MONTH FIRST
+                if ($firstDayMonth <= $d && $d - $firstDayMonth < $daysInMonth) {
+                    
+                    // Calculate the exact day number (1, 2, 3...)
+                    $dayNum = $d - $firstDayMonth + 1;
+                    
+                    // Construct the date string dynamically (e.g., "2023-10-05")
+                    $dateString = sprintf("%04d-%02d-%02d", $year, $month, $dayNum);
 
-                if ($firstDayMonth <= $d && $d-$firstDayMonth < $daysInMonth) {
+                    // NOW RUN THE QUERY for this specific date string
+                    $sql = "SELECT
+                                id_wydarzenia,
+                                id_klasy,
+                                terminarz.id_nauczyciela,
+                                imie,
+                                nazwisko,
+                                nazwa,
+                                typ_wydarzenia,
+                                DATEDIFF(zakres_end, zakres_start) AS check1,
+                                DATE_FORMAT(zakres_start, '%H:%i') AS time_start,
+                                DATE_FORMAT(zakres_end, '%H:%i') AS time_end
+                            FROM terminarz
+                            INNER JOIN nauczyciele
+                            ON terminarz.id_nauczyciela = nauczyciele.id_nauczyciela
+                            INNER JOIN przedmioty
+                            ON terminarz.id_przedmiotu = przedmioty.id_przedmiotu
+                            WHERE id_klasy = $klasa
+                            AND DATEDIFF('$dateString', zakres_start) >= 0
+                            AND DATEDIFF(zakres_end, '$dateString') >= 0";
+                    
+                    $result = $conn->query($sql);
+
                     echo "<td class='tdCalendarDay tdCalendarDayTerminarz'>";
-                    echo "<div class='dayNumber'>" . ($d-$firstDayMonth+1) . "</div>";
+                    echo "<div class='dayNumber'>" . $dayNum . "</div>";
 
                     while ($row = $result->fetch_assoc()) {
                         $Wid = $row['id_wydarzenia'];
@@ -75,23 +95,31 @@
                         echo "</div>";
                     }
 
-                    $dayofmonth = $d-$firstDayMonth;
-                    echo "<input type='radio' name='terminarzAdd' value='$dayofmonth' hidden>";
+                    echo "<input type='radio' name='terminarzAdd' value='$dayNum' hidden>";
                     echo "<label class='buttonGlobal buttonTerminarz addEventButton' title='Dodaj wpis' onclick='this.previousElementSibling.checked=true; f=this.closest(\"form\"); f.action=\"terminarzInfoAdd.php\"; f.submit();'>&plus;</label>";
                     echo "</td>";
+                    
                 } else {
+                    // If it's a blank day padding the start or end of the month
                     echo "<td class='tdCalendarDay tdCalendarDayEmpty'></td>";
                 }
                 $d++;
             }
             echo "</tr>";
         }
+        echo "</table>";
     }
 
     function miesiacSelect() {
         $months = array('Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień');
 
-        $_SESSION['miesiacDefault'] = $_POST['wybrany_miesiac'] ?? 1;
+        if (isset($_POST['wybrany_miesiac'])) {
+            $_SESSION['miesiacDefault'] = intval($_POST['wybrany_miesiac']);
+        } else if (isset($_SESSION['terminarz_miesiac']) && !isset($_SESSION['miesiacDefault'])) {
+            $_SESSION['miesiacDefault'] = intval($_SESSION['terminarz_miesiac']);
+        } else if (!isset($_SESSION['miesiacDefault'])) {
+            $_SESSION['miesiacDefault'] = intval(date('n'));
+        }
         $selected_object = $_SESSION['miesiacDefault'];
 
         for ($i = 0; $i < 12; $i++) {
@@ -112,7 +140,13 @@
         $start = $row['year_start'] ?? date('Y');
         $end = $row['year_end'] ?? date('Y');
 
-        $_SESSION['rokDefault'] = $_POST['wybrany_rok'] ?? $start;
+        if (isset($_POST['wybrany_rok'])) {
+            $_SESSION['rokDefault'] = $_POST['wybrany_rok'];
+        } else if (isset($_SESSION['terminarz_rok']) && !isset($_SESSION['rokDefault'])) {
+            $_SESSION['rokDefault'] = $_SESSION['terminarz_rok'];
+        } else if (!isset($_SESSION['rokDefault'])) {
+            $_SESSION['rokDefault'] = $start;
+        }
         $selected_object = $_SESSION['rokDefault'];
 
         $selected = ($selected_object == $start) ? "selected" : "";

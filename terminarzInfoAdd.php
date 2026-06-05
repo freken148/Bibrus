@@ -10,9 +10,18 @@
         exit;
     }
 
-    // Store class in session when coming from calendar
+    // Persist calendar selection on entry from terminarz.php
     if (isset($_POST['wybrana_klasa'])) {
         $_SESSION['klasaDefault'] = intval($_POST['wybrana_klasa']);
+        $_SESSION['terminarz_klasa'] = intval($_POST['wybrana_klasa']);
+    }
+    if (isset($_POST['wybrany_miesiac'])) {
+        $_SESSION['terminarz_miesiac'] = intval($_POST['wybrany_miesiac']);
+        $_SESSION['miesiacDefault'] = intval($_POST['wybrany_miesiac']);
+    }
+    if (isset($_POST['wybrany_rok'])) {
+        $_SESSION['terminarz_rok'] = $_POST['wybrany_rok'];
+        $_SESSION['rokDefault'] = $_POST['wybrany_rok'];
     }
 
     // Pre-fill date from calendar day selection
@@ -37,7 +46,12 @@
 </head>
 <body class="bodyGlobal bodyTerminarz">
     <div class="formGlobal formTerminarz">
-        <a href="terminarz.php" class="buttonGlobal buttonTerminarz glownaButton backButton">&larr; Wróć</a>
+        <form method="POST" action="terminarz.php" style="display:inline">
+            <input type="hidden" name="wybrana_klasa" value="<?php echo $_SESSION['terminarz_klasa'] ?? ''; ?>">
+            <input type="hidden" name="wybrany_miesiac" value="<?php echo $_SESSION['terminarz_miesiac'] ?? ''; ?>">
+            <input type="hidden" name="wybrany_rok" value="<?php echo $_SESSION['terminarz_rok'] ?? ''; ?>">
+            <button type="submit" class="buttonGlobal buttonTerminarz glownaButton backButton">&larr; Wróć</button>
+        </form>
         <?php
             if (isset($_POST['terminarzINFO'])) {
                 $Wid = intval($_POST['terminarzINFO']);
