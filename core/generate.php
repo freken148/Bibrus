@@ -13,9 +13,9 @@ $charset = 'utf8mb4';
 $truncateFirst     = true; // Set to true to wipe existing data before generating
 $num_classes       = 12;   // e.g., 1A, 1B, 2A, etc.
 $students_per_class = 25;  // ~300 students total
-$grades_per_student = 30;  // ~9000 grades total
-$attend_per_student = 40;  // ~12000 attendance records total
-$notes_per_student  = 4;   // ~1200 notes total
+$grades_per_student = 10;  // ~9000 grades total
+$attend_per_student = 100;  // ~12000 attendance records total
+$notes_per_student  = 10;   // ~1200 notes total
 
 // ==========================================
 // DATABASE CONNECTION
@@ -201,7 +201,7 @@ try {
     // 8. GENERATE TERMINARZ (Events/Schedule)
     $stmt = $pdo->prepare("INSERT INTO terminarz (id_klasy, id_nauczyciela, id_przedmiotu, typ_wydarzenia, opis, zakres_start, zakres_end, data_dodania) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     foreach ($klasy_ids as $id_klasy) {
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             $id_przedmiotu = $przedmioty_ids[array_rand($przedmioty_ids)];
             $id_nauczyciela = $teachers_by_subject[$id_przedmiotu][array_rand($teachers_by_subject[$id_przedmiotu])];
             $typ = $wydarzenia_typy[array_rand($wydarzenia_typy)];

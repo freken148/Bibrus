@@ -1,39 +1,7 @@
 <?php
-    // Plan to make this as iframe in future
     require "core/idk.php";
     require "functions/terminarz_functions.php";
-
-    // handle inline add (TerAdd is pressed inside the add form)
-    if (isset($_POST['TerAdd'])) {
-        terminarzDodaj();
-        header('Location: terminarz.php');
-        exit;
-    }
-
-    // Persist calendar selection on entry from terminarz.php
-    if (isset($_POST['wybrana_klasa'])) {
-        $_SESSION['klasaDefault'] = intval($_POST['wybrana_klasa']);
-        $_SESSION['terminarz_klasa'] = intval($_POST['wybrana_klasa']);
-    }
-    if (isset($_POST['wybrany_miesiac'])) {
-        $_SESSION['terminarz_miesiac'] = intval($_POST['wybrany_miesiac']);
-        $_SESSION['miesiacDefault'] = intval($_POST['wybrany_miesiac']);
-    }
-    if (isset($_POST['wybrany_rok'])) {
-        $_SESSION['terminarz_rok'] = $_POST['wybrany_rok'];
-        $_SESSION['rokDefault'] = $_POST['wybrany_rok'];
-    }
-
-    // Pre-fill date from calendar day selection
-    $prefillDate = '';
-    if (isset($_POST['terminarzAdd'])) {
-        $year = $_POST['wybrany_rok'] ?? date('Y');
-        $month = str_pad($_POST['wybrany_miesiac'] ?? date('m'), 2, '0', STR_PAD_LEFT);
-        $dayOffset = intval($_POST['terminarzAdd']);
-        $prefillDateObj = new DateTime("$year-$month-01");
-        $prefillDateObj->modify("+$dayOffset days");
-        $prefillDate = $prefillDateObj->format('Y-m-d\TH:i');
-    }
+    require "functions/terminarzinfoAdd_functions.php";
 ?>
 
 <!DOCTYPE html>
@@ -104,8 +72,8 @@
                 echo "<table class='tableGlobal tableTerminarz tableTerminarzDetails' border='1'>";
                 echo "<tr><th colspan='2'>Dodaj wpis</th></tr>";
                 echo "<tr><td>Zakres: </td><td>";
-                echo "<input class='inputGlobal inputTerminarz inputTerminarzAdd' type='datetime-local' name='zakresS' value='$prefillDate'>";
-                echo " - <input class='inputGlobal inputTerminarz inputTerminarzAdd' type='datetime-local' name='zakresE'></td></tr>";
+                echo "<input class='inputGlobal inputTerminarz inputTerminarzAdd' type='datetime-local' name='zakresS' value='$prefillDate' required>";
+                echo " - <input class='inputGlobal inputTerminarz inputTerminarzAdd' type='datetime-local' name='zakresE' required></td></tr>";
                 echo "<tr><td>Nauczyciel: </td><td>" . htmlspecialchars($row['imie'] . ' ' . $row['nazwisko']) . "</td></tr>";
                 echo "<tr><td>Przedmiot: </td><td>" . htmlspecialchars($row['nazwa']) . "</td></tr>";
 

@@ -20,7 +20,7 @@
             // lesson row
             echo "<tr class='trLesson'>";
             echo "<td class='tdLessonNum'>" . ($i-1) . "</td>";
-            echo "<td class='tdLessonTime'>" . $timeStart . " – " . $timeEnd . "</td>";
+            echo "<td class='tdLessonTime'>" . $timeStart . "<br>–<br> " . $timeEnd . "</td>";
             for ($j = 0; $j < 7; $j++) {
                 $sql = "SELECT nazwa, imie, nazwisko, numer_sali
                         FROM planlekcji
