@@ -3,8 +3,6 @@
     require "functions/terminarz_functions.php";
     require "core/SelectUczenKlasa.php";
 
-    // Mirror POST -> session on every load so the form selects stay
-    // selected after coming back from terminarzInfoAdd.php.
     if (isset($_POST['wybrana_klasa'])) {
         $_SESSION['klasaDefault'] = intval($_POST['wybrana_klasa']);
         $_SESSION['terminarz_klasa'] = intval($_POST['wybrana_klasa']);

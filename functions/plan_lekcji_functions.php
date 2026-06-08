@@ -17,7 +17,6 @@
             $timeStart = substr($row['godzina_start'], 0, -3);
             $timeEnd = substr($row['godzina_end'], 0, -3);
 
-            // lesson row
             echo "<tr class='trLesson'>";
             echo "<td class='tdLessonNum'>" . ($i-1) . "</td>";
             echo "<td class='tdLessonTime'>" . $timeStart . "<br>–<br> " . $timeEnd . "</td>";
@@ -42,7 +41,6 @@
             }
             echo "</tr>";
 
-            // break row (smaller, no borders)
             if ($i < 14) {
                 $sql = "SELECT godzina_lekcji AS godzina_start
                         FROM lekcjedictionary

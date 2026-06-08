@@ -1,17 +1,7 @@
 <?php
-    /*  Terminarz
-        - Add and remove events by teacher who have lessons with certain class in certain day (except absence, it's should be possible to add in any day)
-        - See events by months based on dates, not day of week like in real librus
-        - Teacher must have to choice a type of event or absence, and range of lessons that it take
-        - All types must be possible to see in lesson plan, except absence
-        - Types of events:
-        sprawdzian, kartkówka, nieobecność, zastępstwo, informacja, inne, wywiadówka
-        - Supervisor of the class must have full access to change timetable events */
-
     function ShowTerminarz() {
         global $conn, $fetchKlasa;
 
-        // Persist selected values to session
         if (isset($_POST['wybrany_rok'])) {
             $_SESSION['terminarz_rok'] = $_POST['wybrany_rok'];
         }
@@ -25,7 +15,6 @@
         $year = $_POST['wybrany_rok'] ?? ($_SESSION['terminarz_rok'] ?? date('Y'));
         $month = $_POST['wybrany_miesiac'] ?? ($_SESSION['terminarz_miesiac'] ?? date('n'));
         
-        // SECURITY FIX: Force $klasa to be an integer to prevent SQL Injection
         $klasa = intval($_POST['wybrana_klasa'] ?? ($_SESSION['terminarz_klasa'] ?? 1));
 
         $date = new DateTime($year . '-' . $month . '-01');
@@ -40,16 +29,12 @@
             echo "<tr>";
             for ($j = 1; $j < 8; $j++) {
                 
-                // CHECK IF IT IS A VALID DAY OF THE MONTH FIRST
                 if ($firstDayMonth <= $d && $d - $firstDayMonth < $daysInMonth) {
                     
-                    // Calculate the exact day number (1, 2, 3...)
                     $dayNum = $d - $firstDayMonth + 1;
                     
-                    // Construct the date string dynamically (e.g., "2023-10-05")
                     $dateString = sprintf("%04d-%02d-%02d", $year, $month, $dayNum);
 
-                    // NOW RUN THE QUERY for this specific date string
                     $sql = "SELECT
                                 id_wydarzenia,
                                 id_klasy,
@@ -100,7 +85,6 @@
                     echo "</td>";
                     
                 } else {
-                    // If it's a blank day padding the start or end of the month
                     echo "<td class='tdCalendarDay tdCalendarDayEmpty'></td>";
                 }
                 $d++;

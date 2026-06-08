@@ -35,7 +35,6 @@
     function SelectKlasy() {
         global $conn;
 
-        // Prefer POST, then session-saved value from terminarz, then default
         if (isset($_POST['wybrana_klasa'])) {
             $_SESSION['klasaDefault'] = intval($_POST['wybrana_klasa']);
         } else if (isset($_SESSION['terminarz_klasa']) && !isset($_SESSION['klasaDefault'])) {

@@ -59,7 +59,6 @@
                 echo "<tr><td>Dodano: </td><td>" . $row['data_dodania'] . "</td></tr>";
                 echo "</table>";
             } else {
-                // show the add form
                 $Tid = $_SESSION['id_nauczyciela'];
                 $sql = "SELECT imie, nazwisko, nazwa
                         FROM nauczyciele

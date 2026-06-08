@@ -1,14 +1,3 @@
-/* ============================================================
-   BIBRUS — minimalistic stylesheet
-   Goal: calm, readable, no decoration noise.
-   Class convention: <globalClass> <pageClass> [variant]
-   See CLASSES.md for the full inventory.
-   ============================================================ */
-
-
-/* -----------------------------------------------------------
-   Theme tokens (light mode)
-   ----------------------------------------------------------- */
 :root {
     --bg:            #fafafa;
     --surface:       #ffffff;
@@ -48,9 +37,6 @@
 }
 
 
-/* -----------------------------------------------------------
-   Reset
-   ----------------------------------------------------------- */
 *,
 *::before,
 *::after { box-sizing: border-box; }
@@ -61,10 +47,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 img, svg { display: block; max-width: 100%; }
 
-
-/* -----------------------------------------------------------
-   Global classes (every page)
-   ----------------------------------------------------------- */
 
 .bodyGlobal {
     font-family: var(--font-sans);
@@ -90,7 +72,6 @@ img, svg { display: block; max-width: 100%; }
 .bodyGlobal br { line-height: 1.6; }
 
 
-/* form: clean card, generous spacing */
 .formGlobal {
     max-width: 1100px;
     margin: 0 auto;
@@ -103,7 +84,6 @@ img, svg { display: block; max-width: 100%; }
 .formGlobal > * + * { margin-top: var(--space-4); }
 
 
-/* table: minimal lines, comfortable density */
 .tableGlobal {
     width: 100%;
     border-collapse: collapse;
@@ -135,7 +115,6 @@ img, svg { display: block; max-width: 100%; }
 .tableGlobal tr:hover td { background: var(--surface-alt); }
 
 
-/* button: single subtle variant, variants just recolor */
 .buttonGlobal {
     display: inline-flex;
     align-items: center;
@@ -161,7 +140,6 @@ img, svg { display: block; max-width: 100%; }
 .buttonGlobal:disabled { opacity: 0.5; cursor: not-allowed; }
 
 
-/* input: simple, with clear focus ring */
 .inputGlobal {
     display: inline-block;
     padding: 7px 10px;
@@ -199,7 +177,6 @@ img, svg { display: block; max-width: 100%; }
 }
 
 
-/* select: native style, but with the focus ring */
 .selectGlobal {
     display: inline-block;
     padding: 7px 30px 7px 10px;
@@ -226,7 +203,6 @@ img, svg { display: block; max-width: 100%; }
 .selectGlobal:disabled { background: var(--surface-alt); cursor: not-allowed; }
 
 
-/* label: small, no box around it, just spacing */
 .labelGlobal {
     display: inline-flex;
     align-items: center;
@@ -241,7 +217,6 @@ img, svg { display: block; max-width: 100%; }
 }
 
 
-/* option: keep native, just inherit */
 .optionGlobal {
     padding: 6px 10px;
     font-family: inherit;
@@ -251,15 +226,8 @@ img, svg { display: block; max-width: 100%; }
 }
 
 
-/* div: no styling by default */
 .divGlobal { display: block; margin: var(--space-1) 0; }
 
-
-/* -----------------------------------------------------------
-   Variant classes
-   ----------------------------------------------------------- */
-
-/* dodajButton base style is set in the v5 section (wider, centered, success color) */
 
 .removeButton {
     color: var(--danger);
@@ -351,10 +319,6 @@ img, svg { display: block; max-width: 100%; }
 }
 
 
-/* -----------------------------------------------------------
-   Table variants (just accent on the first column or border)
-   ----------------------------------------------------------- */
-
 .tableKlasa { background: var(--surface); }
 .tableKlasa td:first-child { font-weight: 600; }
 .tableKlasa th { background: var(--surface-alt); }
@@ -366,10 +330,6 @@ img, svg { display: block; max-width: 100%; }
 .tableWedlugPrzedmiotow td:first-child { text-align: left; font-weight: 500; }
 
 
-/* -----------------------------------------------------------
-   Per-page accents (just a 2px top border, nothing more)
-   ----------------------------------------------------------- */
-
 .bodyFrekwencja .formGlobal { border-top: 2px solid #0d9488; }
 .bodyOceny      .formGlobal { border-top: 2px solid #7c3aed; }
 .bodyUwagi      .formGlobal { border-top: 2px solid #ea580c; }
@@ -378,10 +338,6 @@ img, svg { display: block; max-width: 100%; }
 .bodyLogowanie  .formGlobal { border-top: 2px solid var(--text); }
 .bodyGlowna     .formGlobal { border-top: none; background: transparent; border: none; box-shadow: none; padding: 0; }
 
-
-/* -----------------------------------------------------------
-   Toolbar (radios + selects + glowna button in frekOcenyUni)
-   ----------------------------------------------------------- */
 
 .formGlobal > .labelGlobal,
 .formGlobal > .selectGlobal {
@@ -398,12 +354,6 @@ img, svg { display: block; max-width: 100%; }
     margin-left: var(--space-4);
 }
 
-
-/* -----------------------------------------------------------
-   Calendar (terminarz) — full-size day cells
-   Only applies on the calendar page (terminarz.php);
-   the schedule page (plan_lekcji) has its own .trLesson / .trBreak rules above
-   ----------------------------------------------------------- */
 
 .bodyTerminarz .tableTerminarzCalendar {
     table-layout: fixed;
@@ -440,7 +390,7 @@ img, svg { display: block; max-width: 100%; }
     font-weight: 500;
 }
 
-.tdCalendarDayTerminarz { /* day with events - subtle highlight */
+.tdCalendarDayTerminarz { 
     background: var(--surface-alt);
 }
 
@@ -508,10 +458,6 @@ img, svg { display: block; max-width: 100%; }
 }
 
 
-/* -----------------------------------------------------------
-   Terminarz details / add form
-   ----------------------------------------------------------- */
-
 .tableTerminarzDetails {
     max-width: 640px;
     margin: var(--space-4) auto;
@@ -548,12 +494,6 @@ img, svg { display: block; max-width: 100%; }
 }
 
 
-/* -----------------------------------------------------------
-   Plan lekcji (schedule grid)
-   - Lesson rows: tall, bordered, structured
-   - Break rows: short, borderless, blend with adjacent lesson
-   ----------------------------------------------------------- */
-
 .tableTerminarzCalendar {
     table-layout: fixed;
     border-collapse: separate;
@@ -576,7 +516,6 @@ img, svg { display: block; max-width: 100%; }
     border-bottom: 1px solid var(--border-strong);
 }
 
-/* first two columns (nr lekcji, godziny) are narrower */
 .tableTerminarzCalendar thead th.thLesson:first-child,
 .tableTerminarzCalendar thead th.thLesson:nth-child(2) {
     width: 90px;
@@ -590,7 +529,6 @@ img, svg { display: block; max-width: 100%; }
     border-bottom: 1px solid var(--border-strong);
 }
 
-/* lesson rows */
 .trLesson td {
     padding: var(--space-3) var(--space-3);
     vertical-align: top;
@@ -602,7 +540,6 @@ img, svg { display: block; max-width: 100%; }
 
 .trLesson:last-child td { border-bottom: 1px solid var(--border-strong); }
 
-/* nr lekcji + godziny columns (left 2) get subtle alt background */
 .trLesson .tdLessonNum,
 .trLesson .tdLessonTime {
     background: var(--surface-alt);
@@ -620,7 +557,6 @@ img, svg { display: block; max-width: 100%; }
     font-weight: 500;
 }
 
-/* a lesson cell: 3 lines of info */
 .trLesson .tdLessonCell {
     padding: 6px 10px;
     line-height: 1.35;
@@ -648,7 +584,6 @@ img, svg { display: block; max-width: 100%; }
     color: transparent;
 }
 
-/* break rows: smaller, no border, blend with surrounding */
 .trBreak td {
     padding: 2px var(--space-2);
     background: var(--bg);
@@ -678,7 +613,6 @@ img, svg { display: block; max-width: 100%; }
     background: var(--bg);
 }
 
-/* merge break row with adjacent lesson row visually */
 .trBreak td { border-top: none !important; border-bottom: none !important; }
 .trBreak + .trLesson td { border-top: none !important; }
 .trLesson + .trBreak td { border-bottom: none !important; }
@@ -688,15 +622,9 @@ img, svg { display: block; max-width: 100%; }
 .tableTerminarzCalendar tr.trLesson:hover .tdLessonNum,
 .tableTerminarzCalendar tr.trLesson:hover .tdLessonTime { color: var(--text); }
 
-/* in plan_lekcji page, the 2 left columns should be just slightly
-   accented — not as strong as terminarz */
 .bodyPlanLekcji .tableTerminarzCalendar thead th { background: var(--surface-alt); }
 .bodyPlanLekcji .tableTerminarzCalendar .trLesson td { height: 60px; }
 
-
-/* -----------------------------------------------------------
-   Login page
-   ----------------------------------------------------------- */
 
 .bodyLogowanie {
     background: var(--bg);
@@ -715,11 +643,6 @@ img, svg { display: block; max-width: 100%; }
     margin-top: var(--space-4);
     padding: 10px 16px;
 }
-
-
-/* -----------------------------------------------------------
-   Glowna (main menu) — title above the cards
-   ----------------------------------------------------------- */
 
 .bodyGlowna {
     background: var(--bg);
@@ -747,19 +670,10 @@ img, svg { display: block; max-width: 100%; }
 }
 
 
-/* -----------------------------------------------------------
-   Hide "Według przedmiotów" on uwagi (your existing rule)
-   ----------------------------------------------------------- */
-
 .formUwagi .checkboxGlobal { display: none; }
 .formUwagi label.labelFrekwencja:has(.checkboxGlobal) { display: none; }
 
 
-/* -----------------------------------------------------------
-   v5 — toolbar, glowna sections, grade colors, centered
-   ----------------------------------------------------------- */
-
-/* Toolbar used in frekOcenyUni.php (radios + selects + glowna button) */
 .toolbarFrekwencja {
     display: flex;
     align-items: center;
@@ -774,7 +688,6 @@ img, svg { display: block; max-width: 100%; }
 }
 .toolbarFrekwencja .glownaButton { margin-left: auto; }
 
-/* Toolbar in terminarz (3 selects + glowna button) */
 .toolbarTerminarz {
     display: flex;
     align-items: center;
@@ -788,7 +701,6 @@ img, svg { display: block; max-width: 100%; }
 }
 .toolbarTerminarz .glownaButton { margin-left: auto; }
 
-/* Glowna (main menu) sections */
 .bodyGlowna {
     display: flex;
     flex-direction: column;
@@ -825,7 +737,6 @@ img, svg { display: block; max-width: 100%; }
     padding: 0;
 }
 
-/* Centered text in all selects (and their options) */
 .selectGlobal,
 .selectGlobal option,
 .optionGlobal {
@@ -834,22 +745,18 @@ img, svg { display: block; max-width: 100%; }
 }
 select { text-align: center; }
 
-/* Centered content in every table (both axes) */
 .tableGlobal th,
 .tableGlobal td {
     text-align: center;
     vertical-align: middle;
 }
-/* left-align student names (first col) in per-student tables */
 .tableWyszukaj td:first-child:not(:has(input)),
 .tableUczen td:first-child,
 .tableKlasa td:first-child {
     text-align: left;
 }
-/* klasa table: keep first col left-aligned */
 .tableKlasa td { vertical-align: middle; }
 
-/* Dodaj button — wider, centered, more prominent */
 .dodajButton {
     display: block;
     width: 100%;
@@ -860,14 +767,12 @@ select { text-align: center; }
     font-weight: 600;
 }
 
-/* Back button (used in terminarzInfoAdd) */
 .backButton {
     display: inline-block;
     margin-bottom: var(--space-4);
     text-decoration: none;
 }
 
-/* Grade badge — colored pill (1=red, 2=orange, 3=yellow, 4=green, 5=blue, 6=purple) */
 .gradeBadge {
     display: inline-block;
     min-width: 22px;
@@ -893,7 +798,7 @@ select { text-align: center; }
     line-height: 2;
 }
 
-/* Uwaga badge */
+
 .uwagaBadge {
     display: inline-block;
     padding: 2px 8px;
@@ -905,7 +810,6 @@ select { text-align: center; }
 .uwagaBadgePozytywna { background: var(--success); }
 .uwagaBadgeNegatywna { background: var(--danger); }
 
-/* Terminarz event card (now with proper sub-classes) */
 .eventCardWrapper {
     position: relative;
     padding: 4px;
@@ -936,7 +840,6 @@ select { text-align: center; }
     margin-bottom: 4px;
 }
 
-/* X button positioned at top-right of event card */
 .eventDeleteLabel.terminarzXButton {
     position: absolute;
     top: 2px;
@@ -963,7 +866,6 @@ select { text-align: center; }
 }
 .eventDeleteLabel.terminarzXButton input[type="radio"] { display: none; }
 
-/* + add button (in each day cell) */
 .addEventButton {
     display: inline-block;
     width: 22px;
@@ -986,18 +888,12 @@ select { text-align: center; }
     border-color: var(--primary);
 }
 
-/* Terminarz details / add form input widths */
 .inputTerminarzAdd, .selectTerminarzAdd { width: 100%; }
 .formTerminarzAdd { max-width: 640px; margin: var(--space-4) auto; }
 
-/* Fix some old global rules that conflict with new centered layout */
 .formGlobal > * + * { margin-top: var(--space-3); }
 .bodyGlobal { padding: var(--space-5) var(--space-5); }
 
-
-/* -----------------------------------------------------------
-   Responsive
-   ----------------------------------------------------------- */
 
 @media (max-width: 900px) {
     .bodyGlobal { padding: var(--space-4) var(--space-3); }
@@ -1013,10 +909,6 @@ select { text-align: center; }
     .tableGlobal td { padding: var(--space-2) var(--space-2); }
 }
 
-
-/* -----------------------------------------------------------
-   Print
-   ----------------------------------------------------------- */
 
 @media print {
     .bodyGlobal { background: #fff; padding: 0; }

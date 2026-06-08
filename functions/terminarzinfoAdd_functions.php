@@ -1,12 +1,10 @@
 <?php
-    // handle inline add (TerAdd is pressed inside the add form)
     if (isset($_POST['TerAdd'])) {
         terminarzDodaj();
         header('Location: terminarz.php');
         exit;
     }
 
-    // Persist calendar selection on entry from terminarz.php
     if (isset($_POST['wybrana_klasa'])) {
         $_SESSION['klasaDefault'] = intval($_POST['wybrana_klasa']);
         $_SESSION['terminarz_klasa'] = intval($_POST['wybrana_klasa']);
@@ -20,7 +18,6 @@
         $_SESSION['rokDefault'] = $_POST['wybrany_rok'];
     }
 
-    // Pre-fill date from calendar day selection
     $prefillDate = '';
     if (isset($_POST['terminarzAdd'])) {
         $year = $_POST['wybrany_rok'] ?? date('Y');

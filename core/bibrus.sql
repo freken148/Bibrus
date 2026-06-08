@@ -139,9 +139,3 @@ CREATE TABLE Uwagi (
     FOREIGN KEY (id_ucznia) REFERENCES Uczniowie(id_ucznia),
     FOREIGN KEY (id_nauczyciela) REFERENCES Nauczyciele(id_nauczyciela)
 );
-
-SELECT ocenydictionary.ocena
-                    FROM oceny
-                    INNER JOIN ocenydictionary ON oceny.ocena = ocenydictionary.wartosc
-                    INNER JOIN przedmioty ON oceny.id_przedmiotu = przedmioty.id_przedmiotu
-                    WHERE id_ucznia = 1 AND przedmioty.id_przedmiotu = 1

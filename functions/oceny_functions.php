@@ -1,6 +1,5 @@
 <?php
     function gradeClassFromString($s) {
-        // take the first character of the grade (1, 2, 3, 4, 5, 6)
         $first = substr(trim($s), 0, 1);
         if (in_array($first, ['1','2','3','4','5','6'])) {
             return 'grade' . $first;
@@ -84,7 +83,6 @@
                 }
                 echo "<td>" . htmlspecialchars($row['imie'] . ' ' . $row['nazwisko']) . "</td>";
 
-                // each grade as a colored badge (oldest first, left to right)
                 echo "<td class='ocenyBadgesCell'>";
                 while ($rowOcena = $resOceny->fetch_assoc()) {
                     $cls = gradeClassFromString($rowOcena['ocena']);
@@ -230,7 +228,6 @@
 
             echo "<tr><td>" . htmlspecialchars($row['nazwa']) . "</td>";
 
-            // fetch all grades for this student+subject
             $sql2 = "SELECT ocenydictionary.ocena
                     FROM oceny
                     INNER JOIN ocenydictionary ON oceny.ocena = ocenydictionary.wartosc
